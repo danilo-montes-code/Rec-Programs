@@ -1,4 +1,6 @@
 # Bases
+
+
 import java.util.Scanner;
 
 public class Bases2 {
