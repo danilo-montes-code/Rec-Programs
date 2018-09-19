@@ -1,2 +1,2 @@
 # Rec-Programs
-Programs that I maded for rec in my spare time
+Programs that I made in my spare time.
