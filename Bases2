@@ -5,16 +5,17 @@ public class Bases2 {
     Scanner keyboard = new Scanner(System.in);
    
     System.out.println("Enter a base followed by the number in said base.");
-    int num = keyboard.nextInt();
+    String k = keyboard.nextLine();
     
     System.out.println("Enter a base that the number will be converted into.");
     int base = keyboard.nextInt();
     
     String bin = " ";
     String let = " ";
+    int num = Integer.parseInt(k);
     int number = num;
-    int space = num.indexOf(" ");
-    int b = num.substring(0, space);
+    int space = k.indexOf(" ");
+    String b = k.substring(0, space);
     
     
     
@@ -59,4 +60,3 @@ public class Bases2 {
     }  
   }
 }
-
