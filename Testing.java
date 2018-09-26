@@ -3,15 +3,15 @@ import java.util.Scanner;
 public class Testing {
   public static void main (String [] args) {
     Scanner keyboard = new Scanner(System.in);
-    
+
     System.out.println("Currently supports inputs and outputs from Base 2 to Hexadecimal.");
-    
+
     System.out.println("Enter a base followed by a number in said base.");
     String start = keyboard.nextLine();
-    
+
     System.out.println("Enter a base that the number will be converted into.");
     int convBase = keyboard.nextInt();
-    
+
     String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     String newBaseNum = " ";
     String letter = " "; //If letters need to be used
@@ -20,7 +20,7 @@ public class Testing {
     int baseOld = Integer.parseInt(start.substring(0, space));//Old Base
     String numOld = start.substring(space+1,start.length());//Old Base Number
     int num = baseOldToDec(baseOld, numOld, alpha);
-    
+
     if (convBase<10) { // Displays binary if the base is less than 10
       while (num != 0) {
         newBaseNum = (String.valueOf(num%convBase) + newBaseNum);
@@ -63,34 +63,34 @@ public class Testing {
     int z = 0;
     int length = b.length()-1;
     String chara = b.substring(z,z+1);
-    
+
     for (int x = length;x>=0; x--) {
       if (length<0) {
       } else {
         if (isNumeric(chara)) {
+          cas = c.indexOf(chara);
+          dec = ((int)Math.pow(a,length)*(10+cas)) + dec;
+          z++;
+          length--;
+        } else {
+          System.out.println(chara);
           cas = Integer.parseInt(b.substring(z,z+1));
           if (cas!=0) {
             dec = ((int) Math.pow(a,length)*cas) + dec;
             z++;
             length--;
-          } else if (cas==0){
-            z++;
-            length--;
-          } else {
-            cas = c.indexOf(chara);
-            dec = ((int)Math.pow(a,length)*(10+cas)) + dec;
+          } else if (cas==0) {
             z++;
             length--;
           }
         }
       }
-    }
-    return dec;
+    }return dec;
   }
   public static boolean isNumeric(String strNum) {
     try {
-      double d = Double.parseDouble(strNum);
-    } catch (NullPointerException nfe) {
+      int d = Integer.parseInt(strNum);
+    } catch (NumberFormatException | NullPointerException nfe) {
       return false;
     }
     return true;
