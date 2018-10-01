@@ -15,7 +15,17 @@ public class Blackjack {
       /* Make the card variable, which is random, and if the random number is 10, 
       then randomly choose between the 10 card or a face card. 
       Figure out if you can make the 1 and 11 values for ace the same variable, 
-      so that there is an equal chance of getting either one. */
+      so that there is an equal chance of getting either one. 
+      Probably have the randomizer randomize the String of the cards instead of the number
+      value, and then see if the String is a number. If so, parse int it, if not, 
+      either the player's total the 10 for faces or 1 or 11 for an ace.
+      Also, nested if if the player gets an ace so that the 1 value can be counted
+      if the 11 puts the player over 11. Something like 
+      
+      if (11+playerTotal > 21)
+      playerTotal = playerTotal-10;
+      }
+      */
       
       System.out.println("Your first draw is: +card");
     
