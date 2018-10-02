@@ -1,6 +1,6 @@
 import java.util.Scanner;
 import java.util.Random;
-
+//Add blackjack ai somehow
 public class Blackjack {
   public static void main (String [] args) {
     Scanner keyboard = new Scanner(System.in);
@@ -17,6 +17,9 @@ public class Blackjack {
     String move = keyboard.nextLine();
     
     while (playerTotal >= 21) {
+      System.out.println(card+" before change"); 
+      card = rng.nextInt(13)+1;
+      System.out.println(card+" after change");
       if (move.equalsIgnoreCase("draw")) {
         if (card > 10){
           cardFace = faces.substring(card, card+1);
@@ -38,6 +41,7 @@ public class Blackjack {
           System.out.println("Would you like to draw another card?");
           move = keyboard.nextLine();
         }
+        
         /* Make the card variable, which is random, and if the random number is 10,
          then randomly choose between the 10 card or a face card.
          Figure out if you can make the 1 and 11 values for ace the same variable,
@@ -65,6 +69,8 @@ public class Blackjack {
         System.out.println("Please enter 'Draw' to begin");
         move = keyboard.nextLine();
       }
+    } 
     }
   }
 }
+//https://github.com/TomFanella4/Blackjack-Card-Game-with-AI/blob/master/Blackjack.java
