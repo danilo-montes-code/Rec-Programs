@@ -2,38 +2,69 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class Blackjack {
+  static Random rng = new Random();
+
   public static void main (String [] args) {
     Scanner keyboard = new Scanner(System.in);
-    
+
     System.out.println("Welcome to Blackjack");
     System.out.println("The goal is to get as close as you can to the number 21 without going over.");
-    System.out.println("Face cards are worth 10, and aces are worth either 1 or 11.:);
-    System.out.println('Enter the word "Draw" to begin');
+    System.out.println("Face cards are worth 10, and aces are worth either 1 or 11.");
+    System.out.println("Enter the word 'Draw' to begin, and the word 'Quit' to quit.");
     String move = keyboard.nextLine();
-                       
-    if (move.equalsIgnoreCase("draw") {
-      /* Make the card variable, which is random, and if the random number is 10, 
-      then randomly choose between the 10 card or a face card. 
-      Figure out if you can make the 1 and 11 values for ace the same variable, 
-      so that there is an equal chance of getting either one. 
+    int card = rng.nextInt(13) + 1;
+    String faces = " JQK";
+    String cardFace = "";
+    int playerTotal = 0;
+
+    if (move.equalsIgnoreCase("draw")) {
+      System.out.println("Your first draw is: "+card);
+
+
+      if (card > 10){
+        cardFace = faces.substring(card, card+1);
+        System.out.println("Your card is a "+cardFace);
+        playerTotal = playerTotal + 10;
+        System.out.println("Your current total is "+playerTotal);
+        System.out.println("Would you like to draw another card?");
+        move = keyboard.nextLine();
+      } else if (card > 1 && card <= 10) {
+        System.out.println("Your card is "+card);
+        playerTotal = playerTotal + card;
+        System.out.println("Your current total is "+playerTotal);
+        System.out.println("Would you like to draw another card?");
+        move = keyboard.nextLine();
+      } else if (card == 1) {
+        System.out.println("Your card is an ace.");
+        playerTotal = playerTotal + card;
+        System.out.println("Your current total is "+playerTotal);
+        System.out.println("Would you like to draw another card?");
+        move = keyboard.nextLine();
+    }
+      /* Make the card variable, which is random, and if the random number is 10,
+      then randomly choose between the 10 card or a face card.
+      Figure out if you can make the 1 and 11 values for ace the same variable,
+      so that there is an equal chance of getting either one.
       Probably have the randomizer randomize the String of the cards instead of the number
-      value, and then see if the String is a number. If so, parse int it, if not, 
+      value, and then see if the String is a number. If so, parse int it, if not,
       either the player's total the 10 for faces or 1 or 11 for an ace.
+
+      Make it so that numbers 1 to 13 are possibilities, 11 means J, 12 means Q, 13 means K, and 1 nets you an ace.
+
       Also, nested if if the player gets an ace so that the 1 value can be counted
-      if the 11 puts the player over 11. Something like 
-      
+      if the 11 puts the player over 11. Something like
+
       if (11+playerTotal > 21)
       playerTotal = playerTotal-10;
       }
       */
-      
-      System.out.println("Your first draw is: +card");
-    
-    } else if (move.equalsIgnoreCase("quit") {
+
+
+
+    } else if (move.equalsIgnoreCase("quit")) {
       System.out.println("Thank you for playing.");
-      break;
     } else {
-      System.out.println("Please enter "Draw" to begin");
+      System.out.println("Please enter 'Draw' to begin");
       move = keyboard.nextLine();
     }
   }
