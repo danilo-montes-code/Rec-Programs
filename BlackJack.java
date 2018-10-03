@@ -3,15 +3,7 @@ import java.util.Random;
 //Add blackjack ai somehow
 public class Blackjack {
   static //do scanner here
-  static void moving() {
-    //Do all the stuff here as to the game, ask if you want to play again or quit in the main
-  }
-  
-  
-  
-  public static void main (String [] args) {
-    Scanner keyboard = new Scanner(System.in); // delete when static scanner is made
-    Random rng = new Random(); // add under static scanner
+  public void playTheGame() {
     int card = rng.nextInt(13)+1;
     String faces = " JQK";
     String cardFace = "";
@@ -86,6 +78,28 @@ public class Blackjack {
       }
     } 
     }
-  }
-}
+  } //End of playing the game
+  
+  
+  
+  public static void main (String [] args) {
+    Scanner keyboard = new Scanner(System.in); // delete when static scanner is made
+    Random rng = new Random(); // add under static scanner
+    String answer;
+    playTheGame();
+    System.out.println("Would you like to play again?");
+    answer = keyboard.nextLine();
+    while (!answer.equalsIgnoreCase("yes") || !answer.equalsIgnoreCase("no") {
+      if (answer.equalsIgnoreCase("yes") {
+        playTheGame();
+      } else if (answer.equalsIgnoreCase("no") {
+      System.out.println("Thanks for playing!");
+      } else {
+      System.out.println("Please enter either 'yes' or 'no'.");
+      answer = keyboard.nextLine();
+    }
+                 }
+  } //End of main
+} //End of class
+
 //https://github.com/TomFanella4/Blackjack-Card-Game-with-AI/blob/master/Blackjack.java
