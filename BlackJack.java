@@ -2,9 +2,16 @@ import java.util.Scanner;
 import java.util.Random;
 //Add blackjack ai somehow
 public class Blackjack {
+  static //do scanner here
+  static void moving() {
+    //Do all the stuff here as to the game, ask if you want to play again or quit in the main
+  }
+  
+  
+  
   public static void main (String [] args) {
-    Scanner keyboard = new Scanner(System.in);
-    Random rng = new Random();
+    Scanner keyboard = new Scanner(System.in); // delete when static scanner is made
+    Random rng = new Random(); // add under static scanner
     int card = rng.nextInt(13)+1;
     String faces = " JQK";
     String cardFace = "";
@@ -13,10 +20,10 @@ public class Blackjack {
     System.out.println("Welcome to Blackjack");
     System.out.println("The goal is to get as close as you can to the number 21 without going over.");
     System.out.println("Face cards are worth 10, and aces are worth either 1 or 11.");
-    System.out.println("Enter the word 'Draw' to begin, and the word 'Quit' to quit.");
+    System.out.println("Enter the word 'Draw' to begin, and the word 'Quit' to quit (you can quit at any time).");
     String move = keyboard.nextLine();
     
-    while (playerTotal >= 21) {
+    while (playerTotal <= 21) {
       System.out.println(card+" before change"); 
       card = rng.nextInt(13)+1;
       System.out.println(card+" after change");
@@ -36,12 +43,20 @@ public class Blackjack {
           move = keyboard.nextLine();
         } else if (card == 1) {
           System.out.println("Your card is an ace.");
+          if (playerTotal+11 > 21 && playerTotal+1 > 21) {
+            playerTotal = playerTotal + card;
+            System.out.println("You busted! Enter 'yes' to try again and 'quit' to stop.");
+            move = keyboard.nextLine();
+          } else if (playerTotal + 1 <+ 21) {
           playerTotal = playerTotal + card;
           System.out.println("Your current total is "+playerTotal);
           System.out.println("Would you like to draw another card?");
           move = keyboard.nextLine();
+          }
         }
-        
+        System.out.println("You won! You card total is "+playerTotal);
+        System.out.println("Enter 'draw' to play again and 'quit' to quit.");
+        move = keyboard.nextLine();
         /* Make the card variable, which is random, and if the random number is 10,
          then randomly choose between the 10 card or a face card.
          Figure out if you can make the 1 and 11 values for ace the same variable,
