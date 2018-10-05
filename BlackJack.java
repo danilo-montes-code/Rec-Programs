@@ -1,8 +1,11 @@
 import java.util.Scanner;
 import java.util.Random;
 //Add blackjack ai somehow
+//Add date for randomness
 public class Blackjack {
-  static //do scanner here
+  static int Random = new Random();
+  static Scanner keyboard = new Scanner(System.in);
+  
   public void playTheGame() {
     int card = rng.nextInt(13)+1;
     String faces = " JQK";
@@ -15,12 +18,9 @@ public class Blackjack {
     System.out.println("Enter the word 'Draw' to begin, and the word 'Quit' to quit (you can quit at any time).");
     String move = keyboard.nextLine();
     
-    while (playerTotal <= 21) {
-      System.out.println(card+" before change"); 
-      card = rng.nextInt(13)+1;
-      System.out.println(card+" after change");
-      if (move.equalsIgnoreCase("draw")) {
-        if (card > 10){
+    if (move.equalsIgnoreCase("draw")) {
+      while(playerTotal <= 21) {
+        if (card > 10){ //Face cards
           cardFace = faces.substring(card, card+1);
           System.out.println("Your card is a "+cardFace);
           playerTotal = playerTotal + 10;
@@ -40,23 +40,17 @@ public class Blackjack {
             System.out.println("You busted! Enter 'yes' to try again and 'quit' to stop.");
             move = keyboard.nextLine();
           } else if (playerTotal + 1 <+ 21) {
-          playerTotal = playerTotal + card;
-          System.out.println("Your current total is "+playerTotal);
-          System.out.println("Would you like to draw another card?");
-          move = keyboard.nextLine();
+            playerTotal = playerTotal + card;
+            System.out.println("Your current total is "+playerTotal);
+            System.out.println("Would you like to draw another card?");
+            move = keyboard.nextLine();
           }
         }
+        card = rng.nextInt(13)+1;
         System.out.println("You won! You card total is "+playerTotal);
         System.out.println("Enter 'draw' to play again and 'quit' to quit.");
         move = keyboard.nextLine();
-        /* Make the card variable, which is random, and if the random number is 10,
-         then randomly choose between the 10 card or a face card.
-         Figure out if you can make the 1 and 11 values for ace the same variable,
-         so that there is an equal chance of getting either one.
-         Probably have the randomizer randomize the String of the cards instead of the number
-         value, and then see if the String is a number. If so, parse int it, if not,
-         either the player's total the 10 for faces or 1 or 11 for an ace.
-         
+        /* 
          Make it so that numbers 1 to 13 are possibilities, 11 means J, 12 means Q, 13 means K, and 1 nets you an ace.
          
          Also, nested if if the player gets an ace so that the 1 value can be counted
@@ -68,15 +62,13 @@ public class Blackjack {
          */
         
         
-        
-      } else if (move.equalsIgnoreCase("quit")) {
-        System.out.println("Thank you for playing.");
-        playerTotal = 100;
-      } else {
-        System.out.println("Please enter 'Draw' to begin");
-        move = keyboard.nextLine();
       }
-    } 
+    } else if (move.equalsIgnoreCase("quit")) {
+      System.out.println("Thank you for playing.");
+      playerTotal = 100;
+    } else {
+      System.out.println("Please enter 'Draw' to begin");
+      move = keyboard.nextLine();
     }
   } //End of playing the game
   
@@ -89,16 +81,16 @@ public class Blackjack {
     playTheGame();
     System.out.println("Would you like to play again?");
     answer = keyboard.nextLine();
-    while (!answer.equalsIgnoreCase("yes") || !answer.equalsIgnoreCase("no") {
-      if (answer.equalsIgnoreCase("yes") {
+    while (!answer.equalsIgnoreCase("yes") || !answer.equalsIgnoreCase("no")) {
+      if (answer.equalsIgnoreCase("yes")) {
         playTheGame();
-      } else if (answer.equalsIgnoreCase("no") {
-      System.out.println("Thanks for playing!");
+      } else if (answer.equalsIgnoreCase("no")) {
+        System.out.println("Thanks for playing!");
       } else {
-      System.out.println("Please enter either 'yes' or 'no'.");
-      answer = keyboard.nextLine();
+        System.out.println("Please enter either 'yes' or 'no'.");
+        answer = keyboard.nextLine();
+      }
     }
-                 }
   } //End of main
 } //End of class
 
