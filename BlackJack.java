@@ -9,10 +9,10 @@ public class Blackjack {
   static int playerTotal = 0;
   static String playing; //Used for in game check to see if the user stands
   static String[] suits = {
-    "♠",
-    "♥",
-    "♦",
-    "♣",
+    "?",
+    "?",
+    "?",
+    "?",
   };
   static String[] cards = {
     "A",
@@ -33,7 +33,7 @@ public class Blackjack {
   public static void playTheGame() {
     System.out.println("Enter 'draw' to draw a card and 'stand' to stop receiving cards.");
     playing = keyboard.nextLine();
-    while (!"draw".equalsIgnoreCase(playing) || !"stand".equalsIgnoreCase(playing)) {
+    while (!playing.equalsIgnoreCase("draw") && !playing.equalsIgnoreCase("stand")) {
       System.out.println("Please enter a valid move.");
       playing = keyboard.nextLine();
     }
@@ -103,7 +103,6 @@ public class Blackjack {
 
 /*TODO Nested if if the player gets an ace so that the 1 value can be counted
 if the 11 puts the player over 11. Something like
-
 if (11+playerTotal > 21)
 playerTotal = playerTotal-10;
 */
