@@ -5,16 +5,16 @@ import java.util.Random;
 public class Blackjack {
   static Random rng = new Random(); //Rng
   static Scanner keyboard = new Scanner(System.in); //Input
-  static int card = rng.nextInt(13)+1;
+  static int card = rng.nextInt(13);
   static int playerTotal = 0;
-  static String playing = ""; //Used for in game check to see if the user stands
-  static String[] Suits = {
+  static String playing; //Used for in game check to see if the user stands
+  static String[] suits = {
     "♠",
     "♥",
     "♦",
     "♣",
   };
-  static String[] Cards = {
+  static String[] cards = {
     "A",
     "2",
     "3",
@@ -33,11 +33,31 @@ public class Blackjack {
   public static void playTheGame() {
     System.out.println("Enter 'draw' to draw a card and 'stand' to stop receiving cards.");
     playing = keyboard.nextLine();
-    switch (playing){
+    while (!"draw".equalsIgnoreCase(playing) || !"stand".equalsIgnoreCase(playing)) {
+      System.out.println("Please enter a valid move.");
+      playing = keyboard.nextLine();
+    }
+    switch(playing) {
       //If you draw
       case "draw":
       case "Draw":
-
+      if (card == 0 || card == 7) {
+        System.out.println("You drew an "+ cards[card]);
+      } else {
+        System.out.println("You drew a "+ cards[card]);
+      }
+      if (card >=1 && card <=9) {
+        playerTotal = playerTotal + (card+1);
+      } else if (card >= 10) {
+        playerTotal = playerTotal + 10;
+      } else if (card == 0) { //TODO if playerTotal doesn't go over 21 when the ace is taken as 1 instead of 11 then do that please
+        if (playerTotal+11 > 21) {
+          playerTotal = playerTotal + 1;
+        } else if (playerTotal+11 <= 21) {
+          playerTotal = playerTotal + 11;
+        }
+      }
+      card = rng.nextInt(13); //TODO change rng stuff to make more rng
       break;
       //If you quit
       case "stand":
@@ -59,17 +79,24 @@ public class Blackjack {
       if (playerTotal > 21) {
         win = false;
         game = false;
-        System.out.println("Your final total is "+playerTotal" with "+numOfCards+" cards drawn.");
-      }
-      if (playing.equalsIgnoreCase("stand")) { //Once Ai is added, check if playerTotal > aiTotal and give win accordingly
+        System.out.println("Your final total is "+playerTotal+" with "+numOfCards+" cards drawn.");
+      } else if (playerTotal == 21) {
         game = false;
-        System.out.println("Your final total is "+playerTotal" with "+numOfCards+" cards drawn.");
+      }
+      if (playing.equalsIgnoreCase("stand")) { //TODO Once Ai is added, check if playerTotal > aiTotal and give win accordingly
+        game = false;
+        System.out.println("Your final total is "+playerTotal+" with "+numOfCards+" cards drawn.");
       }
       if (game == true) {
         System.out.println("Your current total is "+playerTotal+" with "+numOfCards+" cards drawn.");
-        cards++;
+        numOfCards++;
       }
     } //End of playing check
+    if (win == true) {
+      System.out.println("You won!");
+    } else if (win == false) {
+      System.out.println("You lost, better luck next time.");
+    }
     System.out.println("Thank you for playing!");
   } //End of main
 } //End of class
