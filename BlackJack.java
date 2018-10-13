@@ -2,11 +2,12 @@ import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Arrays;
 //TODO Add blackjack ai somehow
 //TODO Maybe add playing again function
 public class Blackjack {
   static Random rng = new Random(); //Rng
-  static int cardPicker = rng.nextInt(52); //Card rng
+  static int cardPick = rng.nextInt(52); //Card rng
   static Scanner keyboard = new Scanner(System.in); //Input
   static int playerTotal = 0; //User's in game total
   static String playing; //Used for in game check to see if the user stands
@@ -18,7 +19,12 @@ public class Blackjack {
   static ArrayList<String> deck = new ArrayList<String>(); //Deck
   static ArrayList<String> suits = new ArrayList<String>(); //Suits
   static ArrayList<String> cards = new ArrayList<String>(); //Cards
-  static ArrayList<String> playerDraw = new ArrayList<String>();
+  static ArrayList<String> playerDraw = new ArrayList<String>(); //Drawn Cards
+  static ArrayList<Boolean> aceCheck = new ArrayList<Boolean>(); //Checks for drawn aces
+  static boolean aceS = false;
+  static boolean aceH = false;
+  static boolean aceD = false;
+  static boolean aceC = false;
 
   public static void shuffleDeck() { //Creates deck TODO make it shuffle instead of just create the deck
     Collections.addAll(suits,suitsArray);
@@ -73,20 +79,46 @@ public class Blackjack {
     switch(playing) {
       //If you draw
       case "draw":
-      case "Draw": //TODO If at any point you drew an ace, the ace can become a 1 insetad of an 11 if needed
+      case "Draw":
       System.out.println("Turn "+turn);
       turn++;
       numOfCards++;
-      int cardVal = cardPicker();
-      if (cardVal == 1) {
-        if (playerTotal+11 > 21) {
-          cardVal = 1;
-        } else if (playerTotal+11 <= 21) {
+      int cardVal = cardPicker(); //Number value of card
+      if (cardVal == 1) { //Makes ace 11 if doesn't bust because of it
+        if (playerTotal + 11 < 21) {
           cardVal = 11;
         }
       }
+      //If the drawn deck contains an ace
+      if (playerDraw.contains("A♠")) {
+        if (aceS == false) {
+          aceCheck.add(true);
+        }
+        aceS = true;
+      } if (playerDraw.contains("A♥")) {
+        if (aceH == false) {
+          aceCheck.add(true);
+        }
+        aceH = true;
+      } if (playerDraw.contains("A♦")) {
+        if (aceD == false) {
+          aceCheck.add(true);
+        }
+        aceD = true;
+      } if (playerDraw.contains("A♣")) {
+        if (aceC == false) {
+          aceCheck.add(true);
+        }
+        aceC = true;
+      }
+      for(int x = 0; x<=aceCheck.size()-1;x++) {
+
+
+
+
+      }
       playerTotal = playerTotal + cardVal;
-      cardPicker = rng.nextInt(52); //TODO change rng stuff to make more rng
+      cardPick = rng.nextInt(52); //TODO change rng stuff to make more rng
       break;
       //If you quit
       case "stand":
@@ -103,9 +135,9 @@ public class Blackjack {
     }
   } //End of playTheGame
   public static int cardPicker() {
-    String valString = deck.get(cardPicker);
+    String valString = deck.get(cardPick);
     System.out.println("You drew the "+valString);
-    playerDraw.add(valString);
+    playerDraw.add(valString); //Adds drawn card to player draw pile TODO remove the used card from the deck
     String cardStringVal = valString.substring(0,valString.length()-3);
     int cardVal = 0;
     if (isNumeric(cardStringVal) == false) {
