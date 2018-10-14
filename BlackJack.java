@@ -3,24 +3,28 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Arrays;
-//TODO Add blackjack ai somehow
 //TODO Maybe add playing again function
+//TODO shuffle deck instead of make it
+//TODO add computer player
+//TODO remove cards from deck
+//TODO 2 cards on first draw
 public class Blackjack {
   static Random rng = new Random(); //Rng
-  static int cardPick = rng.nextInt(52); //Card rng
+  static int cardPick = rng.nextInt(52); //Rng
   static Scanner keyboard = new Scanner(System.in); //Input
   static int playerTotal = 0; //User's in game total
   static String playing; //Used for in game check to see if the user stands
   static int turn = 1; //Turn counter
   static int numOfCards = 0; //Draw counter
   //Deck stuff
-  static String[] suitsArray = {"♠","♥","♦","♣",};
+  static String[] suitsArray = {"â™ ","â™¥","â™¦","â™£",};
   static String[] cardsArray = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
   static ArrayList<String> deck = new ArrayList<String>(); //Deck
   static ArrayList<String> suits = new ArrayList<String>(); //Suits
   static ArrayList<String> cards = new ArrayList<String>(); //Cards
   static ArrayList<String> playerDraw = new ArrayList<String>(); //Drawn Cards
   static ArrayList<Boolean> aceCheck = new ArrayList<Boolean>(); //Checks for drawn aces
+  static ArrayList<Boolean> usedAceCheck = new ArrayList<Boolean>(); //Checks for aces accounted for
   static boolean aceS = false;
   static boolean aceH = false;
   static boolean aceD = false;
@@ -38,6 +42,7 @@ public class Blackjack {
 
   public static void main (String [] args) {
     shuffleDeck(); //Currently only creates the deck in the same order everytime
+    System.out.println("-------------------------------------------------------------------------------------------------------------------");
     System.out.println("Welcome to Blackjack");
     System.out.println("The goal is to get as close as you can to the number 21 without going over.");
     System.out.println("Face cards are worth 10, and aces are worth either 1 or 11.");
@@ -80,53 +85,59 @@ public class Blackjack {
       //If you draw
       case "draw":
       case "Draw":
-      System.out.println("Turn "+turn);
-      turn++;
-      numOfCards++;
-      int cardVal = cardPicker(); //Number value of card
-      if (cardVal == 1) { //Makes ace 11 if doesn't bust because of it
-        if (playerTotal + 11 < 21) {
-          cardVal = 11;
+        System.out.println("------");
+        System.out.println("Turn "+turn);
+        System.out.println("------");
+        int cardVal = 0;
+        cardVal = cardPicker();
+        turn++;
+        numOfCards++;
+        if (cardVal == 1) { //Makes ace 11 if doesn't bust because of it
+          if (playerTotal + 11 < 21) {
+            cardVal = 11;
+          }
         }
-      }
-      //If the drawn deck contains an ace
-      if (playerDraw.contains("A♠")) {
-        if (aceS == false) {
-          aceCheck.add(true);
+        //If the drawn deck contains an ace
+        if (playerDraw.contains("Aâ™ ")) {
+          if (aceS == false) {
+            aceCheck.add(true);
+          }
+          aceS = true;
+        } if (playerDraw.contains("Aâ™¥")) {
+          if (aceH == false) {
+            aceCheck.add(true);
+          }
+          aceH = true;
+        } if (playerDraw.contains("Aâ™¦")) {
+          if (aceD == false) {
+            aceCheck.add(true);
+          }
+          aceD = true;
+        } if (playerDraw.contains("Aâ™£")) {
+          if (aceC == false) {
+            aceCheck.add(true);
+          }
+          aceC = true;
         }
-        aceS = true;
-      } if (playerDraw.contains("A♥")) {
-        if (aceH == false) {
-          aceCheck.add(true);
+        if (playerTotal + cardVal > 21) {
+          if(aceCheck.size() != usedAceCheck.size()) { //Trying to prevent loss of score with the -10 if the ace should be 1 instead of 11
+            for(int x = 0; x<=usedAceCheck.size();x++) {
+              playerTotal = playerTotal - 10;
+            }
+            usedAceCheck.add(false);
+          }
         }
-        aceH = true;
-      } if (playerDraw.contains("A♦")) {
-        if (aceD == false) {
-          aceCheck.add(true);
-        }
-        aceD = true;
-      } if (playerDraw.contains("A♣")) {
-        if (aceC == false) {
-          aceCheck.add(true);
-        }
-        aceC = true;
-      }
-      for(int x = 0; x<=aceCheck.size()-1;x++) {
-
-
-
-
-      }
-      playerTotal = playerTotal + cardVal;
-      cardPick = rng.nextInt(52); //TODO change rng stuff to make more rng
-      break;
-      //If you quit
+        playerTotal = playerTotal + cardVal;
+        cardPick = rng.nextInt(52);
+        break;
+        //If you quit
       case "stand":
       case "Stand":
-      break;
+        break;
+        //if you view your cards
       case "view":
       case "View":
-      if (turn == 1) {
+        if (turn == 1) {
         System.out.println("You have not drawn any cards yet.");
       } else {
         System.out.println("So far, you have drawn: "+playerDraw);
@@ -134,6 +145,7 @@ public class Blackjack {
       break;
     }
   } //End of playTheGame
+
   public static int cardPicker() {
     String valString = deck.get(cardPick);
     System.out.println("You drew the "+valString);
@@ -161,10 +173,4 @@ public class Blackjack {
     return true;
   } //End of isNumeric
 } //End of class
-
-/*TODO Nested if if the player gets an ace so that the 1 value can be counted
-if the 11 puts the player over 11. Something like
-if (11+playerTotal > 21)
-playerTotal = playerTotal-10;
-*/
 //https://github.com/TomFanella4/Blackjack-Card-Game-with-AI/blob/master/Blackjack.java (If I need a guide)
