@@ -17,7 +17,7 @@ public class Blackjack {
   static int turn = 1; //Turn counter
   static int numOfCards = 0; //Draw counter
   //Deck stuff
-  static String[] suitsArray = {"â™ ","â™¥","â™¦","â™£",};
+  static String[] suitsArray = {"♠","♥","♦","♣",};
   static String[] cardsArray = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
   static ArrayList<String> deck = new ArrayList<String>(); //Deck
   static ArrayList<String> suits = new ArrayList<String>(); //Suits
@@ -98,22 +98,22 @@ public class Blackjack {
           }
         }
         //If the drawn deck contains an ace
-        if (playerDraw.contains("Aâ™ ")) {
+        if (playerDraw.contains("♠")) {
           if (aceS == false) {
             aceCheck.add(true);
           }
           aceS = true;
-        } if (playerDraw.contains("Aâ™¥")) {
+        } if (playerDraw.contains("♥")) {
           if (aceH == false) {
             aceCheck.add(true);
           }
           aceH = true;
-        } if (playerDraw.contains("Aâ™¦")) {
+        } if (playerDraw.contains("♦")) {
           if (aceD == false) {
             aceCheck.add(true);
           }
           aceD = true;
-        } if (playerDraw.contains("Aâ™£")) {
+        } if (playerDraw.contains("♣")) {
           if (aceC == false) {
             aceCheck.add(true);
           }
