@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 //TODO Maybe add playing again function
 //TODO shuffle deck instead of make it
-//TODO add computer player
+//TODO add computer player -- make the playTheGame method accept which player is playing (either computer or human)
 //TODO remove cards from deck
 //TODO 2 cards on first draw
     public class Blackjack {
+        //Starting stuff
         static Random rng = new Random(); //Rng
         static int cardPick = rng.nextInt(52); //Rng
         static Scanner keyboard = new Scanner(System.in); //Input
@@ -17,13 +18,16 @@ import java.util.Collections;
         static int numOfCards = 0; //Draw counter
         //Deck stuff
         static String[] suitsArray = {"♠","♥","♦","♣"};
-        static String[] cardsArray = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
-        static ArrayList<String> deck = new ArrayList<String>(); //Deck
         static ArrayList<String> suits = new ArrayList<String>(); //Suits
+        static String[] cardsArray = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
         static ArrayList<String> cards = new ArrayList<String>(); //Cards
-        static ArrayList<String> playerDraw = new ArrayList<String>(); //Drawn Cards
+        static ArrayList<String> deck = new ArrayList<String>(); //Deck
+        //Game Deck stuff
+        static ArrayList<String> playerDraw = new ArrayList<String>(); //Player's Drawn Cards
+        static ArrayList<String> discardPile = new ArrayList<String>(); //Discard Pile
         static ArrayList<Boolean> aceCheck = new ArrayList<Boolean>(); //Checks for drawn aces
         static ArrayList<Boolean> usedAceCheck = new ArrayList<Boolean>(); //Checks for aces accounted for
+        //Aces stuff - Checks if aces were used
         static boolean aceS = false;
         static boolean aceH = false;
         static boolean aceD = false;
@@ -67,7 +71,7 @@ import java.util.Collections;
             } //End of playing check
             if (win) {
                 System.out.println("You won!");
-            } else if (!win) {
+            } else {
                 System.out.println("You lost, better luck next time.");
             }
             System.out.println("Thank you for playing!");
