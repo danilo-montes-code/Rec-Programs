@@ -2,7 +2,6 @@ import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Arrays;
 //TODO Maybe add playing again function
 //TODO shuffle deck instead of make it
 //TODO add computer player
@@ -17,7 +16,7 @@ import java.util.Arrays;
         static int turn = 1; //Turn counter
         static int numOfCards = 0; //Draw counter
         //Deck stuff
-        static String[] suitsArray = {"♠","♥","♦","♣",};
+        static String[] suitsArray = {"♠","♥","♦","♣"};
         static String[] cardsArray = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
         static ArrayList<String> deck = new ArrayList<String>(); //Deck
         static ArrayList<String> suits = new ArrayList<String>(); //Suits
@@ -174,4 +173,3 @@ import java.util.Arrays;
         } //End of isNumeric
     } //End of class
 //https://github.com/TomFanella4/Blackjack-Card-Game-with-AI/blob/master/Blackjack.java (If I need a guide)
-
