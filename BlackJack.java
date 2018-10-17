@@ -53,6 +53,15 @@ public class Blackjack {
         boolean win = true;
 
         while (game) {
+            System.out.println("Enter 'draw' to draw a card, 'stand' to stop receiving cards, and 'view' to see all the cards that you have drawn.");
+        playing = keyboard.nextLine();
+        while (!playing.equalsIgnoreCase("draw") && !playing.equalsIgnoreCase("stand") && !playing.equalsIgnoreCase("view")) {
+            System.out.println("Please enter a valid move.");
+            playing = keyboard.nextLine();
+        }
+            if (turn == 1) 
+                turnOne();
+            else 
             playTheGame();
             if (playerTotal > 21) {
                 win = false;
@@ -76,14 +85,25 @@ public class Blackjack {
         }
         System.out.println("Thank you for playing!");
     } //End of main
-
-    public static void playTheGame() {
-        System.out.println("Enter 'draw' to draw a card, 'stand' to stop receiving cards, and 'view' to see all the cards that you have drawn.");
-        playing = keyboard.nextLine();
-        while (!playing.equalsIgnoreCase("draw") && !playing.equalsIgnoreCase("stand") && !playing.equalsIgnoreCase("view")) {
-            System.out.println("Please enter a valid move.");
-            playing = keyboard.nextLine();
-        }
+    
+    
+    
+    
+    private static void turnOne() {
+        case "draw":
+        case "Draw":
+        System.out.println("------");
+                System.out.println("Turn "+turn);
+                System.out.println("------");
+        case "stand":
+        case "Stand":
+        
+        case "view":
+        case "View":
+           
+       
+    }
+    private static void playTheGame() {
         switch(playing) {
             //If you draw
             case "draw":
@@ -91,7 +111,7 @@ public class Blackjack {
                 System.out.println("------");
                 System.out.println("Turn "+turn);
                 System.out.println("------");
-                int cardVal = 0;
+                int cardVal = 0;                
                 cardVal = cardPicker();
                 turn++;
                 numOfCards++;
