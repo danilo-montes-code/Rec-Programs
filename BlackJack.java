@@ -124,7 +124,7 @@ public class Blackjack {
             }
                 if (playerTotal + cardVal > 21) {
                     if(aceCheck.size() != usedAceCheck.size()) { //Trying to prevent loss of score with the -10 if the ace should be 1 instead of 11
-                        for(int x = 0; x<usedAceCheck.size();x++) {
+                        for(int x = usedAceCheck.size(); x<aceCheck.size();x++) {
                             playerTotal = playerTotal - 10;
                         }
                         usedAceCheck.add(false);
