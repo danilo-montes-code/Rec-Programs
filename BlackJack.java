@@ -5,13 +5,12 @@ import java.util.Collections;
 /*
 TODO Maybe add playing again function
 TODO add computer player -- make the playTheGame method accept which player is playing (either computer or human)
-TODO remove cards from deck
 TODO 2 cards on first draw
 */
 public class Blackjack {
     //Starting stuff
     static Random rng = new Random(); //Rng
-    static int cardPick = rng.nextInt(52); //Rng
+    static int cardPick;
     static Scanner keyboard = new Scanner(System.in); //Input
     static int playerTotal = 0; //User's in game total
     static String playing; //Used for in game check to see if the user stands
@@ -25,7 +24,6 @@ public class Blackjack {
     static ArrayList<String> deck = new ArrayList<String>(); //Deck
     //Game Deck stuff
     static ArrayList<String> playerDraw = new ArrayList<String>(); //Player's Drawn Cards
-    static ArrayList<String> discardPile = new ArrayList<String>(); //Discard Pile
     static ArrayList<Boolean> aceCheck = new ArrayList<Boolean>(); //Checks for drawn aces
     static ArrayList<Boolean> usedAceCheck = new ArrayList<Boolean>(); //Checks for aces accounted for
     //Aces stuff - Checks if aces were used
@@ -42,6 +40,7 @@ public class Blackjack {
                 deck.add(cards.get(card)+suits.get(suit));
             }
         }
+        cardPick = rng.nextInt(deck.size());
     } //End of shuffleDeck
 
     public static void main (String [] args) {
@@ -103,29 +102,29 @@ public class Blackjack {
                 }
                 //If the drawn deck contains an ace
                 if (playerDraw.contains("♠")) {
-                    if (aceS == false) {
+                    if (!aceS) {
                         aceCheck.add(true);
                     }
                     aceS = true;
                 } if (playerDraw.contains("♥")) {
-                if (aceH == false) {
+                if (!aceH) {
                     aceCheck.add(true);
                 }
                 aceH = true;
             } if (playerDraw.contains("♦")) {
-                if (aceD == false) {
+                if (!aceD) {
                     aceCheck.add(true);
                 }
                 aceD = true;
             } if (playerDraw.contains("♣")) {
-                if (aceC == false) {
+                if (!aceC) {
                     aceCheck.add(true);
                 }
                 aceC = true;
             }
                 if (playerTotal + cardVal > 21) {
                     if(aceCheck.size() != usedAceCheck.size()) { //Trying to prevent loss of score with the -10 if the ace should be 1 instead of 11
-                        for(int x = 0; x<=usedAceCheck.size();x++) {
+                        for(int x = 0; x<usedAceCheck.size();x++) {
                             playerTotal = playerTotal - 10;
                         }
                         usedAceCheck.add(false);
@@ -133,7 +132,7 @@ public class Blackjack {
                 }
                 playerTotal = playerTotal + cardVal;
                 deck.remove(cardPick);
-                cardPick = rng.nextInt(52);
+                cardPick = rng.nextInt(deck.size());
                 break;
             //If you quit
             case "stand":
@@ -157,7 +156,7 @@ public class Blackjack {
         playerDraw.add(valString); //Adds drawn card to player draw pile TODO remove the used card from the deck
         String cardStringVal = valString.substring(0,valString.length()-1);
         int cardVal = 0;
-        if (isNumeric(cardStringVal) == false) {
+        if (!isNumeric(cardStringVal)) {
             if (cardStringVal.equals("A")) {
                 cardVal = 1;
             } else {
