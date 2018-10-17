@@ -6,6 +6,7 @@ import java.util.Collections;
 TODO Maybe add playing again function
 TODO add computer player -- make the playTheGame method accept which player is playing (either computer or human)
 TODO 2 cards on first draw
+TODO MAKE STUFF LOOK NICER
 */
 public class Blackjack {
     //Starting stuff
