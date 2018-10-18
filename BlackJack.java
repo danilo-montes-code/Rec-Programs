@@ -41,8 +41,27 @@ public class Blackjack {
 
     /* Methods:
     main = where you give the win or loss {
-    call: playTheGame(); {
-    stillPlaying(), changeTotal();
+    while (game) {
+    playTheGame();
+    --->   hit, stand, view;
+    case hit:
+    playerTurn();
+    compTurn();
+    ----> if (turn == 1) {
+    return int cardPicker();
+    total = total + cardVal
+    cardRemove();
+    cardPicker();
+    total = total + cardval
+    cardRemove();
+    Display player deck arraylist
+    //if drew 2 aces do stuff
+    } else {
+    return int cardPicker();
+    ----->
+    aceStuff();
+    cardRemove();
+    }
     }
     } */
             
