@@ -11,10 +11,14 @@ TODO MAKE STUFF LOOK NICER
 public class Blackjack {
     //Starting stuff
     static Random rng = new Random(); //Rng
-    static int cardPick;
+    static int cardPick; //Picks the card from the deck
     static Scanner keyboard = new Scanner(System.in); //Input
+    
     static int playerTotal = 0; //User's in game total
+    static int computerTotal = 0; //Computer's in game total
+    
     static String playing; //Used for in game check to see if the user stands
+    
     static int turn = 1; //Turn counter
     static int numOfCards = 0; //Draw counter
     //Deck stuff
@@ -23,17 +27,85 @@ public class Blackjack {
     static String[] cardsArray = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
     static ArrayList<String> cards = new ArrayList<String>(); //Cards
     static ArrayList<String> deck = new ArrayList<String>(); //Deck
+    
     //Game Deck stuff
     static ArrayList<String> playerDraw = new ArrayList<String>(); //Player's Drawn Cards
     static ArrayList<Boolean> aceCheck = new ArrayList<Boolean>(); //Checks for drawn aces
     static ArrayList<Boolean> usedAceCheck = new ArrayList<Boolean>(); //Checks for aces accounted for
+    
     //Aces stuff - Checks if aces were used
     static boolean aceS = false;
     static boolean aceH = false;
     static boolean aceD = false;
     static boolean aceC = false;
 
-    public static void shuffleDeck() { //Creates deck
+    /* Methods:
+    main = where you give the win or loss {
+    call: playTheGame(); {
+    stillPlaying(), changeTotal();
+    }
+    } */
+            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public static void main (String [] args) {
+        shuffleDeck(); //Currently only creates the deck in the same order everytime
+        System.out.println("-------------------------------------------------------------------------------------------------------------------");
+        System.out.println("Welcome to Blackjack");
+        System.out.println("The goal is to get as close as you can to the number 21 without going over.");
+        System.out.println("Face cards are worth 10, and aces are worth either 1 or 11.");
+        boolean game = true;
+        boolean win = false;
+
+        while (game) {
+            //change playerTotal based on picked card
+            //change computerTotal based on picked card - same method for both actions
+            //compare the values and give out win or loss accordingly
+           
+            
+            
+            
+            
+            
+            playTheGame();
+            if (playerTotal > 21) {
+                win = false;
+                game = false;
+                System.out.println("Your final total is "+playerTotal+" with "+numOfCards+" cards drawn.");
+            } else if (playerTotal == 21) {
+                game = false;
+                System.out.println("Your final total is "+playerTotal+" with "+numOfCards+" cards drawn.");
+            }
+            
+            if (playing.equalsIgnoreCase("stand")) { //TODO Once Ai is added, check if playerTotal > aiTotal and give win accordingly
+                game = false;
+                System.out.println("Your final total is "+playerTotal+" with "+numOfCards+" cards drawn.");
+            }
+            if (game) {
+                System.out.println("Your current total is "+playerTotal+" with "+numOfCards+" cards drawn.");
+            }
+        } //End of playing check
+        
+        if (playerTotal > computerTotal) 
+            game = true;
+        if (win) {
+            System.out.println("You won!");
+            System.out.println("Yo
+        } else {
+            System.out.println("You lost, better luck next time.");
+        }
+        System.out.println("Thank you for playing!");
+    } //End of main
+    
+ public static void shuffleDeck() { //Creates deck GOOD
         Collections.addAll(suits,suitsArray);
         Collections.addAll(cards,cardsArray);
         for (int suit = 0; suit<= 3; suit++) {
@@ -43,41 +115,7 @@ public class Blackjack {
         }
         cardPick = rng.nextInt(deck.size());
     } //End of shuffleDeck
-
-    public static void main (String [] args) {
-        shuffleDeck(); //Currently only creates the deck in the same order everytime
-        System.out.println("-------------------------------------------------------------------------------------------------------------------");
-        System.out.println("Welcome to Blackjack");
-        System.out.println("The goal is to get as close as you can to the number 21 without going over.");
-        System.out.println("Face cards are worth 10, and aces are worth either 1 or 11.");
-        boolean game = true;
-        boolean win = true;
-
-        while (game) {
-            playTheGame();
-            if (playerTotal > 21) {
-                win = false;
-                game = false;
-                System.out.println("Your final total is "+playerTotal+" with "+numOfCards+" cards drawn.");
-            } else if (playerTotal == 21) {
-                game = false;
-            }
-            if (playing.equalsIgnoreCase("stand")) { //TODO Once Ai is added, check if playerTotal > aiTotal and give win accordingly
-                game = false;
-                System.out.println("Your final total is "+playerTotal+" with "+numOfCards+" cards drawn.");
-            }
-            if (game) {
-                System.out.println("Your current total is "+playerTotal+" with "+numOfCards+" cards drawn.");
-            }
-        } //End of playing check
-        if (win) {
-            System.out.println("You won!");
-        } else {
-            System.out.println("You lost, better luck next time.");
-        }
-        System.out.println("Thank you for playing!");
-    } //End of main
-
+    
     public static void playTheGame() {
         System.out.println("Enter 'draw' to draw a card, 'stand' to stop receiving cards, and 'view' to see all the cards that you have drawn.");
         playing = keyboard.nextLine();
