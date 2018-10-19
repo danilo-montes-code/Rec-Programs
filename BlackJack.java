@@ -66,7 +66,7 @@ public class Blackjack {
             System.out.println("You won!");
         else
             System.out.println("You lost!");
-        System.out.println("You had a total of +"playerTotal+" and the computer had a total of "+compTotal);
+        System.out.println("You had a total of "+playerTotal+" and the computer had a total of "+compTotal);
         System.out.println("Thanks for playing!");
     } //End of main
 
@@ -119,13 +119,33 @@ public class Blackjack {
                 if (playerTotal + 11 < 21) {
                     cardVal = 11;
                 }
+                cardVal = aceStuff(cardVal, playerTotal);
             }
-            aceStuff();
-                //Do some ace check stuff and if not then bust
-
+            playerTotal = playerTotal + cardVal;
         }
         playerTotal  = playerTotal + cardVal;
     } //End of playerTurn
+
+    private static void compTurn() {
+        int cardVal = 0;
+        if (turn == 1) {
+            compTotal = cardGet();
+            cardRemover();
+            compTotal = compTotal + cardGet();
+            cardRemover();
+        } else {
+            cardVal = cardGet();
+            cardRemover();
+            if (cardVal == 1) { //Makes ace 11 if doesn't bust because of it
+                if (compTotal + 11 < 21) {
+                    cardVal = 11;
+                }
+                cardVal = aceStuff(cardVal, compTotal);
+            }
+            compTotal = compTotal + cardVal;
+        }
+        compTotal  = compTotal + cardVal;
+    } //End of compTurn
 
     private static int cardGet() {
         int cardVal = 0;
@@ -143,39 +163,36 @@ public class Blackjack {
         return cardVal;
     } //End of cardGet
 
-    private static void aceStuff() { //SHOULD BE THE LAST PLAYER THING
-        /* //Check to see if the deck has the ace, and if not, do ace thingys
-        //If the drawn deck contains an ace
-        if (playerDraw.contains("A♠")) {
-            if (!aceS) {
+    private static int aceStuff(int aceValue, int total) { //[MAYBE DONE, NEEDS TESTING]
+        if (!dealerDeck.contains("A♠")) {
+            if (!aceS) //Only adds ace to aceCheck if it wasn't already in there
                 aceCheck.add(true);
-            }
             aceS = true;
-        } if (playerDraw.contains("A♥")) {
-            if (!aceH) {
+        }if (!dealerDeck.contains("A♥")) {
+            if (!aceH)
                 aceCheck.add(true);
-            }
             aceH = true;
-        } if (playerDraw.contains("A♦")) {
-            if (!aceD) {
+        } if (!dealerDeck.contains("A♦")) {
+            if (!aceD)
                 aceCheck.add(true);
-            }
             aceD = true;
-        } if (playerDraw.contains("A♣")) {
-            if (!aceC) {
+        } if (!dealerDeck.contains("A♣")) {
+            if (!aceC)
                 aceCheck.add(true);
-            }
             aceC = true;
         }
-        if (playerTotal + cardVal > 21) {
+        //If the drawn deck contains an ace
+        if (total + aceValue > 21) {
             if(aceCheck.size() != usedAceCheck.size()) { //Trying to prevent loss of score with the -10 if the ace should be 1 instead of 11
                 for(int x = usedAceCheck.size(); x<aceCheck.size();x++) {
-                    playerTotal = playerTotal - 10;
+                    total = total - 10;
                 }
                 usedAceCheck.add(false);
             }
-        } */
-    }
+        }
+        return total;
+    } //End of aceStuff
+
     private static void cardRemover() { //[DONE]
         dealerDeck.remove(cardPick);
         cardPick = rng.nextInt(dealerDeck.size());
@@ -189,9 +206,8 @@ public class Blackjack {
         }
         return true;
     } //End of isNumeric
-
-
-    /* Methods:
+} //End of class
+/* Methods:
         main = where you give the win or loss [DONE]{
         call: playTheGame(); {
         playerTurn() {
@@ -222,4 +238,3 @@ public class Blackjack {
         }
         }
         } */
-} //End of class
