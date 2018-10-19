@@ -28,11 +28,6 @@ public class Blackjack {
     static boolean aceD = false;
     static boolean aceC = false;
 
-
-
-
-
-
     public static void main(String[] args) { //[PRETTY SURE IT'S DONE]
         createDeck();
         System.out.println("-------------------------------------------------------------------------------------------------------------------");
@@ -54,19 +49,26 @@ public class Blackjack {
             else { //If you stand
                 game = false;
                 System.out.println("Your final total is "+playerTotal+", and you hand is "+playerHand);
-            }
-            if (playerTotal > compTotal) {
+                if (playerTotal > compTotal) {
                 win = true;
                 game = false;
-            } else if (playerTotal < compTotal) {
+                } else if (playerTotal < compTotal) {
                 game = false;
+                }
             }
-        }
+            if (playerTotal > 21)
+                game = false;
+        } //End of game loop
+        if (playerTotal > compTotal) 
+                win = true;
         if (win)
             System.out.println("You won!");
         else
             System.out.println("You lost!");
-        System.out.println("You had a total of "+playerTotal+" and the computer had a total of "+compTotal);
+        if (playerTotal > 21)
+            System.out.println("You busted with "+playerTotal+". The computer had a total of "+compTotal);
+        else
+            System.out.println("You had a total of "+playerTotal+" and the computer had a total of "+compTotal);
         System.out.println("Thanks for playing!");
     } //End of main
 
@@ -121,9 +123,10 @@ public class Blackjack {
                 }
                 cardVal = aceStuff(cardVal, playerTotal);
             }
-            playerTotal = playerTotal + cardVal;
+            if (playerTotal + cardVal <= 21) 
+                playerTotal = playerTotal + cardVal;
+            else
         }
-        playerTotal  = playerTotal + cardVal;
     } //End of playerTurn
 
     private static void compTurn() {
@@ -197,7 +200,7 @@ public class Blackjack {
         dealerDeck.remove(cardPick);
         cardPick = rng.nextInt(dealerDeck.size());
     } //End of cardRemover
-
+    
     private static boolean isNumeric(String strNum) { //[DONE]
         try {
             int d = Integer.parseInt(strNum);
