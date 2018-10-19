@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
-public class WhiteJill {
+public class Blackjack {
     //Starting stuff
     static Random rng = new Random(); //RNG
     static int cardPick; //Picks a card
@@ -10,16 +10,16 @@ public class WhiteJill {
     static int playerTotal = 0; //User's in game total
     static int compTotal = 0; //Computer's in game total
     static int turn = 1; //Turn counter
-    static String playing = "";
+    static String playing = ""; //Hit, Stand check
+    static String drawnCard = ""; //Drawn Card
     //Deck stuff
     static String[] suitsArray = {"♠","♥","♦","♣"};
     static ArrayList<String> suits = new ArrayList<String>(); //Suits
     static String[] cardsArray = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
     static ArrayList<String> cards = new ArrayList<String>(); //Cards
-    static ArrayList<String> deck = new ArrayList<String>(); //Deck
+    static ArrayList<String> dealerDeck = new ArrayList<String>(); //Deck
     //Game Deck stuff
     static ArrayList<String> playerHand = new ArrayList<String>(); //Player's Drawn Cards
-    static ArrayList<String> discardPile = new ArrayList<String>(); //Discard Pile
     static ArrayList<Boolean> aceCheck = new ArrayList<Boolean>(); //Checks for drawn aces
     static ArrayList<Boolean> usedAceCheck = new ArrayList<Boolean>(); //Checks for aces accounted for
     //Aces stuff - Checks if aces were used
@@ -28,34 +28,7 @@ public class WhiteJill {
     static boolean aceD = false;
     static boolean aceC = false;
 
-/* Methods:
-    main = where you give the win or loss [DONE]{
-    call: playTheGame(); {
-    stillPlaying check, changeTotal();
-    }
-    while (game) {
-    playTheGame();
-    --->   hit, stand, view;
-    case hit:
-    playerTurn();
-    compTurn();
-    ----> if (turn == 1) {
-    return int cardPicker();
-    total = total + cardVal
-    cardRemove();
-    cardPicker();
-    total = total + cardval
-    cardRemove();
-    Display player deck arraylist
-    //if drew 2 aces do stuff
-    } else {
-    return int cardPicker();
-    ----->
-    aceStuff();
-    cardRemove();
-    }
-    }
-    } */
+
 
 
 
@@ -76,8 +49,9 @@ public class WhiteJill {
                 System.out.println("Your current total is "+playerTotal+", and you hand is "+playerHand);
             }
             playTheGame();
-            turn++;
-            if (playing.equalsIgnoreCase("stand")) {
+            if (playing.equalsIgnoreCase("hit"))
+                turn++;
+            else { //If you stand
                 game = false;
                 System.out.println("Your final total is "+playerTotal+", and you hand is "+playerHand);
             }
@@ -101,53 +75,61 @@ public class WhiteJill {
         Collections.addAll(cards,cardsArray);
         for (int suit = 0; suit<= 3; suit++) {
             for (int card = 0; card <=12;card++) {
-                deck.add(cards.get(card)+suits.get(suit));
+                dealerDeck.add(cards.get(card)+suits.get(suit));
             }
         }
-        cardPick = rng.nextInt(deck.size());
+        cardPick = rng.nextInt(dealerDeck.size());
     } //End of createDeck
 
     private static void playTheGame() { //[MAYBE DONE]
-        playerTurn();
-        compTurn();
-    } //End of playTheGame
-
-    private static void playerTurn() { //[MAYBE DONE]
-        int cardVal = 0;
         System.out.println("Enter 'hit' to draw a card and 'stand' to stop receiving cards.");
         playing = keys.nextLine();
-        while (!playing.equalsIgnoreCase("stand") && !playing.equalsIgnoreCase("view")) {
+        while (!playing.equalsIgnoreCase("stand") && !playing.equalsIgnoreCase("hit")) {
             System.out.println("Please enter a valid move.");
             playing = keys.nextLine();
         }
         switch(playing) {
             case "hit":
             case "Hit":
-                if (turn == 1) {
-                    playerTotal = cardGet();
-                    cardRemover();
-                    playerTotal = playerTotal + cardGet();
-                    cardRemover();
-                    System.out.println("Your hand: " + playerHand);
-                } else {
-                    cardVal = cardGet();
-                    System.out.println("You drew the "+deck.get(cardPick));
-                    cardRemover();
-                    if (playerTotal + cardVal > 21) {
-                        //Do some ace check stuff and if not then bust
-                    }
-                }
-                break;
+                playerTurn();
+                compTurn();
             case "stand":
             case "Stand":
                 break;
         }
+    } //End of playTheGame
+
+    private static void playerTurn() { //[MAYBE DONE]
+        int cardVal = 0;
+        if (turn == 1) {
+            playerTotal = cardGet();
+            playerHand.add(drawnCard);
+            cardRemover();
+            playerTotal = playerTotal + cardGet();
+            playerHand.add(drawnCard);
+            cardRemover();
+            System.out.println("Your hand: " + playerHand);
+            //Do some if you draw two aces two decks stuff. Also, check to see if the aces are missing from the game deck to account for them
+        } else {
+            cardVal = cardGet();
+            System.out.println("You drew the "+dealerDeck.get(cardPick));
+            playerHand.add(drawnCard);
+            cardRemover();
+            if (cardVal == 1) { //Makes ace 11 if doesn't bust because of it
+                if (playerTotal + 11 < 21) {
+                    cardVal = 11;
+                }
+            }
+            aceStuff();
+                //Do some ace check stuff and if not then bust
+
+        }
+        playerTotal  = playerTotal + cardVal;
     } //End of playerTurn
 
     private static int cardGet() {
         int cardVal = 0;
-        String drawnCard = deck.get(cardPick);
-        playerHand.add(drawnCard);
+        drawnCard = dealerDeck.get(cardPick);
         String drawnCardValue = drawnCard.substring(0,drawnCard.length()-1);
         if (!isNumeric(drawnCardValue)) {
             if (drawnCardValue.equals("A")) {
@@ -161,9 +143,42 @@ public class WhiteJill {
         return cardVal;
     } //End of cardGet
 
+    private static void aceStuff() { //SHOULD BE THE LAST PLAYER THING
+        /* //Check to see if the deck has the ace, and if not, do ace thingys
+        //If the drawn deck contains an ace
+        if (playerDraw.contains("A♠")) {
+            if (!aceS) {
+                aceCheck.add(true);
+            }
+            aceS = true;
+        } if (playerDraw.contains("A♥")) {
+            if (!aceH) {
+                aceCheck.add(true);
+            }
+            aceH = true;
+        } if (playerDraw.contains("A♦")) {
+            if (!aceD) {
+                aceCheck.add(true);
+            }
+            aceD = true;
+        } if (playerDraw.contains("A♣")) {
+            if (!aceC) {
+                aceCheck.add(true);
+            }
+            aceC = true;
+        }
+        if (playerTotal + cardVal > 21) {
+            if(aceCheck.size() != usedAceCheck.size()) { //Trying to prevent loss of score with the -10 if the ace should be 1 instead of 11
+                for(int x = usedAceCheck.size(); x<aceCheck.size();x++) {
+                    playerTotal = playerTotal - 10;
+                }
+                usedAceCheck.add(false);
+            }
+        } */
+    }
     private static void cardRemover() { //[DONE]
-        deck.remove(cardPick);
-        cardPick = rng.nextInt(deck.size());
+        dealerDeck.remove(cardPick);
+        cardPick = rng.nextInt(dealerDeck.size());
     } //End of cardRemover
 
     private static boolean isNumeric(String strNum) { //[DONE]
@@ -175,4 +190,36 @@ public class WhiteJill {
         return true;
     } //End of isNumeric
 
+
+    /* Methods:
+        main = where you give the win or loss [DONE]{
+        call: playTheGame(); {
+        playerTurn() {
+        stillPlaying check, changeTotal, add card to draw pile, DO ACE THINGS ; [ALMOST DONE]
+        }
+        }
+        main
+        while (game) {
+        playTheGame();
+        --->   hit, stand, view; [DONE]
+        case hit: [DONE]
+        playerTurn();
+        compTurn();
+        ----> if (turn == 1) { [DONE]
+        return int cardPicker();
+        total = total + cardVal
+        cardRemove();
+        cardPicker();
+        total = total + cardval
+        cardRemove();
+        Display player deck arraylist
+        //if drew 2 aces do stuff
+        } else { [DONE]
+        return int cardPicker();
+        ----->
+        aceStuff();
+        cardRemove();
+        }
+        }
+        } */
 } //End of class
