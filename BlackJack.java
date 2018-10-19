@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
-public class Blackjack {
+public class BlackJack {
     //Starting stuff
     static Random rng = new Random(); //RNG
     static int cardPick; //Picks a card
@@ -49,18 +49,14 @@ public class Blackjack {
             else { //If you stand
                 game = false;
                 System.out.println("Your final total is "+playerTotal+", and you hand is "+playerHand);
-                if (playerTotal > compTotal) {
-                win = true;
-                game = false;
-                } else if (playerTotal < compTotal) {
-                game = false;
-                }
+                if (playerTotal > compTotal)
+                    win = true;
             }
             if (playerTotal > 21)
                 game = false;
         } //End of game loop
-        if (playerTotal > compTotal) 
-                win = true;
+        if (playerTotal > compTotal && playerTotal <= 21)
+            win = true;
         if (win)
             System.out.println("You won!");
         else
@@ -123,9 +119,7 @@ public class Blackjack {
                 }
                 cardVal = aceStuff(cardVal, playerTotal);
             }
-            if (playerTotal + cardVal <= 21) 
                 playerTotal = playerTotal + cardVal;
-            else
         }
     } //End of playerTurn
 
@@ -200,7 +194,7 @@ public class Blackjack {
         dealerDeck.remove(cardPick);
         cardPick = rng.nextInt(dealerDeck.size());
     } //End of cardRemover
-    
+
     private static boolean isNumeric(String strNum) { //[DONE]
         try {
             int d = Integer.parseInt(strNum);
@@ -210,34 +204,4 @@ public class Blackjack {
         return true;
     } //End of isNumeric
 } //End of class
-/* Methods:
-        main = where you give the win or loss [DONE]{
-        call: playTheGame(); {
-        playerTurn() {
-        stillPlaying check, changeTotal, add card to draw pile, DO ACE THINGS ; [ALMOST DONE]
-        }
-        }
-        main
-        while (game) {
-        playTheGame();
-        --->   hit, stand, view; [DONE]
-        case hit: [DONE]
-        playerTurn();
-        compTurn();
-        ----> if (turn == 1) { [DONE]
-        return int cardPicker();
-        total = total + cardVal
-        cardRemove();
-        cardPicker();
-        total = total + cardval
-        cardRemove();
-        Display player deck arraylist
-        //if drew 2 aces do stuff
-        } else { [DONE]
-        return int cardPicker();
-        ----->
-        aceStuff();
-        cardRemove();
-        }
-        }
-        } */
+//https://github.com/TomFanella4/Blackjack-Card-Game-with-AI/blob/master/Blackjack.java (If I need a guide)
