@@ -205,3 +205,4 @@ public class BlackJack {
     } //End of isNumeric
 } //End of class
 //https://github.com/TomFanella4/Blackjack-Card-Game-with-AI/blob/master/Blackjack.java (If I need a guide)
+//https://beginnersbook.com/2013/12/java-arraylist/
