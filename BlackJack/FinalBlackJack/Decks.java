@@ -19,6 +19,9 @@ public class Decks {
         Collections.shuffle(cards);
     } //End of makeDeck
 
+    public void removeTopCard() {
+        cards.remove(0);
+    }
 
 
     //Testing Methods
