@@ -29,26 +29,3 @@ public class Decks {
         return cards;
     }
 } //End of class
-/*
-    //Deck Stuff
-    private static String[] suitsArray = {"♠","♥","♦","♣"};
-    private static ArrayList<String> suits = new ArrayList<String>(); //Suits
-
-    private static ArrayList<String> cards = new ArrayList<String>(); //Cards
-    private static ArrayList<String> dealerDeck = new ArrayList<String>(); //Deck
-    //Game Deck Stuff
-    private static ArrayList<String> playerHand = new ArrayList<String>(); //Player's Drawn Cards
-    private static ArrayList<Boolean> aceCheck = new ArrayList<Boolean>(); //Checks for drawn aces
-    private static ArrayList<Boolean> usedAceCheck = new ArrayList<Boolean>(); //Checks for aces accounted for
-    //Creating the deck
-    private static void createDeck() {
-        Collections.addAll(suits,suitsArray);
-        Collections.addAll(cards,cardsArray);
-        for (int suit = 0; suit<= 3; suit++) {
-            for (int card = 0; card <=12;card++) {
-                dealerDeck.add(cards.get(card)+suits.get(suit));
-            }
-        }
-        cardPick = rng.nextInt(dealerDeck.size());
-    }
-    */
