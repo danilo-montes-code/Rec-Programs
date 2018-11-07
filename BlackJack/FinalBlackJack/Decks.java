@@ -8,6 +8,8 @@ public class Decks {
 
   public Decks() { //Constructor
     cards = new ArrayList<>();
+    aceCheck = new ArrayList<>();
+    usedAceCheck = new ArrayList<>();
   }
 
   public void makeDeck() { //Makes the deck
@@ -25,61 +27,45 @@ public class Decks {
     return cards.remove(0);
   }
 
-  public int aceStuff(int card, int score) {
+  public int aceStuff(int score) {
     if (!cards.contains("A♠")) {
-      if (!aceS) //Only adds ace to aceCheck if it wasn't already in there
-      aceCheck.add(true);
+      if (!aceS)
+        aceCheck.add(true);
       aceS = true;
-    } if (!cards.contains("A♥")) {
+    }
+    if (!cards.contains("A♥")) {
       if (!aceH)
-      aceCheck.add(true);
+        aceCheck.add(true);
       aceH = true;
-    } if (!cards.contains("A♦")) {
+    }
+    if (!cards.contains("A♦")) {
       if (!aceD)
-      aceCheck.add(true);
+        aceCheck.add(true);
       aceD = true;
-    } if (!cards.contains("A♣")) {
+    }
+    if (!cards.contains("A♣")) {
       if (!aceC)
-      aceCheck.add(true);
+        aceCheck.add(true);
       aceC = true;
     }
-    //If the drawn deck contains an ace
-    if (score + card > 21) {
-      if(aceCheck.size() != usedAceCheck.size()) {
-        for(int x = usedAceCheck.size(); x<aceCheck.size();x++) {
-          card = card - 10;
-        }
+    if (aceCheck.size() != usedAceCheck.size()) {
+      for (int x = usedAceCheck.size(); x < aceCheck.size(); x++) {
+        score -= 10;
         usedAceCheck.add(false);
+        if (score + 11 < 21) { //Only runs if there are 2 aces that haven't been made 1
+          score += 10;
+          usedAceCheck.remove(0);
+        }
       }
     }
-    return card;
+    return score;
   } //End of aceStuff
 
   //Testing Methods
   public ArrayList showDeck() {
     return cards;
   }
+  public void removeTop() {
+    cards.remove(0);
+  }
 } //End of class
-/*
-//Deck Stuff
-private static String[] suitsArray = {"♠","♥","♦","♣"};
-private static ArrayList<String> suits = new ArrayList<String>(); //Suits
-
-private static ArrayList<String> cards = new ArrayList<String>(); //Cards
-private static ArrayList<String> cards = new ArrayList<String>(); //Deck
-//Game Deck Stuff
-private static ArrayList<String> playerHand = new ArrayList<String>(); //Player's Drawn Cards
-private static ArrayList<Boolean> aceCheck = new ArrayList<Boolean>(); //Checks for drawn aces
-private static ArrayList<Boolean> usedAceCheck = new ArrayList<Boolean>(); //Checks for aces accounted for
-//Creating the deck
-private static void createDeck() {
-Collections.addAll(suits,suitsArray);
-Collections.addAll(cards,cardsArray);
-for (int suit = 0; suit<= 3; suit++) {
-for (int card = 0; card <=12;card++) {
-cards.add(cards.get(card)+suits.get(suit));
-}
-}
-cardPick = rng.nextInt(cards.size());
-}
-*/
