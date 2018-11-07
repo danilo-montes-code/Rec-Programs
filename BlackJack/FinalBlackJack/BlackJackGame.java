@@ -110,8 +110,12 @@ public class BlackJackGame {
                 ", and the computer had "+compTotal+" total with a hand of "+compDeck+".");
       }
     }
-    System.out.println("Do you want to play again?"); //Works
+    System.out.println("Do you want to play again?");
     String playAgain = keys.nextLine();
+    while (!playAgain.equalsIgnoreCase("Yes") && !playAgain.equalsIgnoreCase("No")) {
+      System.out.println("Please enter a valid choice");
+      playAgain = keys.nextLine();
+    }
     if (playAgain.equalsIgnoreCase("Yes"))
       new BlackJackGame();
   } //End of determineWinner
@@ -123,7 +127,7 @@ public class BlackJackGame {
     return blackjack;
   } //End of blackJackHand
 
-  private static boolean isNumeric(String strNum) { //Done
+  private static boolean isNumeric(String strNum) {
     try {
       int d = Integer.parseInt(strNum);
     } catch (NumberFormatException | NullPointerException nfe) {
@@ -132,7 +136,7 @@ public class BlackJackGame {
     return true;
   } //End of isNumeric
 
-  public static void main(String[] args) { //Done
+  public static void main(String[] args) {
     BlackJackGame game = new BlackJackGame();
   }
 }
