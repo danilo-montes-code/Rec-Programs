@@ -28,22 +28,22 @@ public class Decks {
   }
 
   public int aceStuff(int score) {
-    if (!cards.contains("A♠")) {
+    if (cards.contains("A♠")) {
       if (!aceS)
         aceCheck.add(true);
       aceS = true;
     }
-    if (!cards.contains("A♥")) {
+    if (cards.contains("A♥")) {
       if (!aceH)
         aceCheck.add(true);
       aceH = true;
     }
-    if (!cards.contains("A♦")) {
+    if (cards.contains("A♦")) {
       if (!aceD)
         aceCheck.add(true);
       aceD = true;
     }
-    if (!cards.contains("A♣")) {
+    if (cards.contains("A♣")) {
       if (!aceC)
         aceCheck.add(true);
       aceC = true;
@@ -51,7 +51,7 @@ public class Decks {
     if (aceCheck.size() != usedAceCheck.size()) {
       for (int x = usedAceCheck.size(); x < aceCheck.size(); x++) {
         score -= 10;
-        usedAceCheck.add(false);
+        usedAceCheck.add(true);
         if (score + 11 < 21) { //Only runs if there are 2 aces that haven't been made 1
           score += 10;
           usedAceCheck.remove(0);
@@ -60,6 +60,10 @@ public class Decks {
     }
     return score;
   } //End of aceStuff
+  
+  public void addCard(String card){
+    cards.add(card);
+  }
 
   //Testing Methods
   public ArrayList showDeck() {
