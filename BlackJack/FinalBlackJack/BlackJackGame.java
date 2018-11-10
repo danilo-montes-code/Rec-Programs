@@ -2,8 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BlackJackGame {
-  private Decks gameDeck;
-  private ArrayList<String> userDeck, compDeck;
+  private Decks gameDeck, userDeck, compDeck;
   private int userTotal, compTotal, turn;
   private Scanner keys = new Scanner(System.in);
 
@@ -42,7 +41,7 @@ public class BlackJackGame {
           if (userTotal >= 21 || compTotal >= 21)
             game = false;
           else
-            System.out.println("\nYour hand: "+userDeck+"\nYour current total is "+userTotal);
+            System.out.println("\nYour hand: "+userDeck.showDeck()+"\nYour current total is "+userTotal);
           break;
         case "stand":
           game = false;
@@ -64,8 +63,12 @@ public class BlackJackGame {
           System.out.println("The computer got blackjack!");
       }
     }
-    if (score > 21)
-      score = gameDeck.aceStuff(score); //Makes 1 if it can, stays 11 if it can't
+    if (score > 21) {
+    if (player == 0)
+      score = userDeck.aceStuff(score); //Makes 1 if it can, stays 11 if it can't
+      else
+      score = compDeck.aceStuff
+      }
     return score;
   } //End of takeTurn
 
@@ -74,9 +77,9 @@ public class BlackJackGame {
     int cardVal;
     String value = card.substring(0,card.length()-1);
     if (player == 0) {
-      userDeck.add(card);
+      userDeck.addCard(card);
     } else if (player == 1) {
-      compDeck.add(card);
+      compDeck.addCard(card);
     }
     if (!isNumeric(value)) {
       if (value.equals("A")) {
@@ -92,22 +95,22 @@ public class BlackJackGame {
 
   private void determineWinner() {
     if (userTotal > 21) {
-      System.out.println("Sorry, you busted with a total of "+userTotal+" and a hand of "+userDeck);
-      System.out.println("The computer won with "+compTotal+" total with a hand of "+compDeck);
+      System.out.println("Sorry, you busted with a total of "+userTotal+" and a hand of "+userDeck.showDeck());
+      System.out.println("The computer won with "+compTotal+" total with a hand of "+compDeck.showDeck());
     } else if (compTotal > 21) {
-      System.out.println("The computer busted with a total of "+compTotal+" and a hand of "+compDeck);
-      System.out.println("You won with "+userTotal+" total with a hand of "+userDeck);
+      System.out.println("The computer busted with a total of "+compTotal+" and a hand of "+compDeck.showDeck());
+      System.out.println("You won with "+userTotal+" total with a hand of "+userDeck.showDeck());
     } else {
       if (userTotal > compTotal)
-        System.out.println("Congratulations, you won! You had "+userTotal+" total with a hand of "+userDeck+
-                ", and the computer had "+compTotal+" total with a hand of "+compDeck+".");
+        System.out.println("Congratulations, you won! You had "+userTotal+" total with a hand of "+userDeck.showDeck()+
+                ", and the computer had "+compTotal+" total with a hand of "+compDeck.showDeck()+".");
       else if (userTotal < compTotal) {
-        System.out.println("Sorry, you lost. You had "+userTotal+" total with a hand of "+userDeck+
-                ", and the computer had "+compTotal+" total with a hand of "+compDeck+".");
+        System.out.println("Sorry, you lost. You had "+userTotal+" total with a hand of "+userDeck.showDeck()+
+                ", and the computer had "+compTotal+" total with a hand of "+compDeck.showDeck()+".");
       }
       else if (userTotal == compTotal) {
-        System.out.println("You tied with the computer! You had "+userTotal+" total with a hand of "+userDeck+
-                ", and the computer had "+compTotal+" total with a hand of "+compDeck+".");
+        System.out.println("You tied with the computer! You had "+userTotal+" total with a hand of "+userDeck.showDeck()+
+                ", and the computer had "+compTotal+" total with a hand of "+compDeck.showDeck()+".");
       }
     }
     System.out.println("Do you want to play again?");
