@@ -64,11 +64,11 @@ public class BlackJackGame {
       }
     }
     if (score > 21) {
-    if (player == 0)
-      score = userDeck.aceStuff(score); //Makes 1 if it can, stays 11 if it can't
+      if (player == 0)
+        score = userDeck.aceStuff(score); //Makes 1 if it can, stays 11 if it can't
       else
-      score = compDeck.aceStuff
-      }
+        score = compDeck.aceStuff(score);
+    }
     return score;
   } //End of takeTurn
 
@@ -94,7 +94,10 @@ public class BlackJackGame {
   } //End of drawCard
 
   private void determineWinner() {
-    if (userTotal > 21) {
+    if (userTotal > 21 && compTotal > 21) {
+      System.out.println("Both you and the computer busted! You had "+userTotal+" total with a hand of "+userDeck.showDeck()+
+              ", and the computer had "+compTotal+" total with a hand of "+compDeck.showDeck()+".");
+    } else if (userTotal > 21) {
       System.out.println("Sorry, you busted with a total of "+userTotal+" and a hand of "+userDeck.showDeck());
       System.out.println("The computer won with "+compTotal+" total with a hand of "+compDeck.showDeck());
     } else if (compTotal > 21) {
