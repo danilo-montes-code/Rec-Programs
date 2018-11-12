@@ -60,7 +60,7 @@ public class Decks {
     }
     return score;
   } //End of aceStuff
-  
+
   public void addCard(String card){
     cards.add(card);
   }
