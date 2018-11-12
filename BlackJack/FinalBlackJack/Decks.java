@@ -65,11 +65,7 @@ public class Decks {
     cards.add(card);
   }
 
-  //Testing Methods
   public ArrayList showDeck() {
     return cards;
-  }
-  public void removeTop() {
-    cards.remove(0);
   }
 } //End of class
