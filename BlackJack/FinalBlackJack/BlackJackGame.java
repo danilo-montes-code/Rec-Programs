@@ -8,8 +8,8 @@ public class BlackJackGame {
 
   private BlackJackGame() {
     gameDeck = new Decks();
-    userDeck = new ArrayList<>();
-    compDeck = new ArrayList<>();
+    userDeck = new Decks();
+    compDeck = new Decks();
     gameDeck.makeDeck();
     System.out.println("-------------------------------------------------------" +
             "------------------------------------------------------------");
