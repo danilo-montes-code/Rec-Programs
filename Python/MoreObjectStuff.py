@@ -11,6 +11,7 @@ class Animal():
 
 
 # This class inherits the methods from the Animal class so that they don't have to be rewritten
+# You can also overwrite methods that are pre defining in the inherited class
 class Dog(Animal):
 
     def __init__(self):
