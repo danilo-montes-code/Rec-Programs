@@ -1,3 +1,8 @@
+//--------------------------------------------------------------------------------------------------------------------------//
+//------------------------------------/Google Sheets Voting System by Danilo Montes/----------------------------------------//
+//--------------------------------------------------------------------------------------------------------------------------//
+
+
 // Sets the global spreadsheet and ui variables
 var ss = SpreadsheetApp.getActiveSpreadsheet();
 var sheet;
@@ -27,27 +32,34 @@ function isAuthenticated() {
 function onOpen() {
   // Creates the custom dropdown menu on the ribbon
   if (isAuthenticated()) {
-    ui.createMenu('Voting System') //---------------------/Change to ui.createAddonMenu() when publishing as add-on/--------//
+    //------------------------------/Change to ui.createAddonMenu() when publishing as add-on/------------------------------//
+    ui.createMenu('Voting System')
+    // Applies to early sheet setup
     .addItem('Create Sheet Headers','createHeaders')
+    .addItem('Make New Spreadsheet','copySpreadsheet')
     .addItem('Make New Sheet with Same Headers', 'duplicateSheetAndHeaders')
     .addSeparator()
+    // Applies to making modifications for the entire sheet
     .addItem('Clear Header Row','clearHeaders')
     .addItem('Change All Column Widths','setWidths')
     .addSeparator()
+    // Applies to making modifications for the header columns only
     .addItem('Change Header Widths','resizeHeaders')
     .addItem('Change Header Font Size', 'changeHeaderFontSize')
     .addSeparator()
+    // Applies to the voting cells
+    .addItem('Delete Sheet Rows', 'delRows')
     .addItem('Make Voting Cells','makeVotingCells')
     .addSeparator()
+    // Applies to info about the script
     .addItem('Info', 'info')
     .addSeparator()
-    .addItem('Del Sheets','delSheets')
-    .addItem('Del Rows', 'delRows')
+    // Just for me to make things easier
+    .addItem('Delete Sheets','delSheets')
     .addToUi();
   }
-  ui.createMenu('Vote')
-  .addItem('Vote', 'vote')
-  .addToUi()
+  ui.createMenu('Vote').addItem('Vote', 'vote').addToUi();  // Vote Menu
+  ui.createMenu('Authorization').addItem('Give Edit Permission', 'onOpen').addToUi();  // Authorization Menu
 }
 
 
@@ -97,9 +109,19 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
   }
 
 
-    // Creates a new sheet with the same headers as the active sheet
+
+  // Creates copy of the spreadsheet
+  function copySpreadsheet() {
+    var newSS = ui.prompt('What do you want to name the new Spreadsheet?')
+    if (newSS.getSelectedButton() == ui.Button.OK)
+      ss.copy(newSS.getResponseText());
+    ui.alert('New spreadsheet entitled "'+newSS.getResponseText()+'" has been created. Go to either your drive or the Google Sheets home page to open it.');
+  }
+
+
+  // Creates a new sheet with the same headers as the active sheet
   function duplicateSheetAndHeaders() {
-    var resp = ui.prompt('How many sheets to you want to make?', ui.ButtonSet.OK);
+    var resp = ui.prompt('How many sheets to you want to make?');
     if (resp.getSelectedButton() == ui.Button.OK) {
       while (true) {
         var text = resp.getResponseText();
@@ -149,7 +171,7 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
   }
 
 
-    // Sets the size of all the columns in the entire sheet
+  // Sets the size of all the columns in the entire sheet
   function setWidths() {
     var width = columnWidth(sheet.getColumnWidth(1));
     if (width != 0)
@@ -167,7 +189,7 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
     var columnCounter = 1;
     var width = columnWidth(sheet.getColumnWidth(1));
     if (width != 0) {
-      var headers = getHeaders();
+      var headers = getHeadRow();
       headers[0].forEach(function(header) {
         if (header != '' && header != 'Voting')
           sheet.setColumnWidth(columnCounter, width);
@@ -180,9 +202,9 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
   // Changes the size of the headers
   function changeHeaderFontSize() {
     var columnCounter = 1;
-    var size = ui.prompt('What size font do you want the header column to be?', ui.ButtonSet.OK);
+    var size = ui.prompt('What size font do you want the header column to be?');
     if (size.getSelectedButton() == ui.Button.OK) {
-      var headers = getHeaders();
+      var headers = getHeadRow();
       headers[0].forEach(function(header) {
         if (header != '' && header != 'Voting')
           sheet.getRange(1, columnCounter).setFontSize(parseInt(size.getResponseText()));
@@ -197,41 +219,83 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
   //--------------------------------------------------------------------------------------------------------------------------//
 
 
+  // Deletes unnecessary rows
+  function delRows() {
+    var resp = ui.prompt('Enter the last row to be kept on the sheet.');
+    while (true) {
+      if (resp.getSelectedButton() == ui.Button.OK) {
+        if (!isNaN(parseInt(resp.getResponseText()))) {
+          if (parseInt(resp.getResponseText()) < sheet.getMaxRows())
+          sheet.deleteRows(parseInt(resp.getResponseText()), sheet.getMaxRows()-parseInt(resp.getResponseText()));
+          break;
+        } else {
+          if (resp.getResponseText() != '') {
+            ui.alert('Please enter the last row\'s number.');
+            resp = ui.prompt('Enter the last row to be kept on the sheet.');
+          } else
+            break;
+        }
+      } else
+        break;
+    }
+  }
+
+
   // Makes the upvote and downvote columns
   function makeVotingCells() {
-    var columnCounter = 1;
-    var headers = getHeaders();
-    headers[0].forEach(function(header) {
-      // If the header is neither empty nor has 'Voting' in the box
-      if (header != '' && header != 'Voting') {
-        var responseRows = getResponseRowAmnt(columnCounter);
-        // If there is something under the header
-        if (responseRows.length != 0) {
+    var goOrNo = ui.alert('It is highly recommended that you delete unnecessary rows before you make the voting cells.',
+                          'If you have already deleted unnecessary rows, click "OK." If you haven\'t done so, click either "CANCEL" or the X button in the top right.\nNumber of rows in this sheet: '+sheet.getMaxRows().toString(),
+        ui.ButtonSet.OK_CANCEL);
+    if (goOrNo == ui.Button.OK) {
+      var columnCounter = 1;
+      var headers = getHeadRow();
+      headers[0].forEach(function(header) {
 
-          // Makes the three voting columns
-          for (i = 0; i < 3; i++)
-            sheet.insertColumnAfter(columnCounter);
+        // If the header is neither empty nor has 'Voting' in the box
+        if (header != '' && header != 'Voting') {
+          var responseRows = getResponseRowAmnt(columnCounter);
 
-          // Sets the values in the voting columns
-          sheet.getRange(1, columnCounter+1, 1, 2).merge();
-          sheet.getRange(1, columnCounter+1).setValue('Voting').setHorizontalAlignment('center');
-          sheet.getRange(1, columnCounter+3, responseRows[responseRows.length-1]).setBackground('grey');
-          sheet.setColumnWidth(columnCounter+3, 5);
+          // If there is something under the header
+          if (responseRows.length != 0) {
+            if (sheet.getRange(1, columnCounter + 1).getValue() != 'Voting') { // Prevents a second voting layer if there is already one
 
-          // Puts the voting columns next to the cells that are filled
-          for (len = 0; len < responseRows.length; len++) {
-            var rowPlacer = responseRows[len];
-            sheet.getRange(rowPlacer, columnCounter + 1).setValue('=IMAGE("http://i67.tinypic.com/zwcexc.jpg", 4, 20, 20)').setHorizontalAlignment("center").setVerticalAlignment("middle"); // Upvote
-            sheet.getRange(rowPlacer, columnCounter + 2).setValue('=IMAGE("http://i67.tinypic.com/23vi253.jpg", 4, 20, 20)').setHorizontalAlignment("center").setVerticalAlignment("middle"); // Downvote
-            sheet.setRowHeight(rowPlacer, 30);
+              // Makes the three voting columns
+              for (i = 0; i < 3; i++)
+                sheet.insertColumnAfter(columnCounter);
+
+              // Sets the values in the voting columns
+              sheet.getRange(1, columnCounter+1, 1, 2).merge();
+              sheet.getRange(1, columnCounter+1).setValue('Voting').setHorizontalAlignment('center');
+              sheet.setColumnWidth(columnCounter+3, 5);
+            }
+
+            // Puts the voting columns next to the cells that are filled
+            for (len = 0; len < responseRows.length; len++) {
+              var rowPlacer = responseRows[len];
+              if (sheet.getRange(rowPlacer, columnCounter + 1).getFormula() != '=IMAGE("http://i67.tinypic.com/zwcexc.jpg", 4, 20, 20)') {
+                sheet.getRange(rowPlacer, columnCounter + 1).setValue('=IMAGE("http://i67.tinypic.com/zwcexc.jpg", 4, 20, 20)').setHorizontalAlignment("center").setVerticalAlignment("middle"); // Upvote
+                sheet.getRange(rowPlacer, columnCounter + 2).setValue('=IMAGE("http://i67.tinypic.com/23vi253.jpg", 4, 20, 20)').setHorizontalAlignment("center").setVerticalAlignment("middle"); // Downvote
+                sheet.setRowHeight(rowPlacer, 30);
+              }
+            }
+
+            // If the row that the last bit of data is in is greater than the last row that the grey background extends to, extends the grey to the end of the data
+            if (responseRows[responseRows.length-1] > lastGreyRow(columnCounter + 3))
+            sheet.getRange(1, columnCounter+3, responseRows[responseRows.length-1]).setBackground('grey');
+            // If the row that the last bit of data is in is less than the last row that the grey background extends to, shortens the grey to the end of the data
+            else if (responseRows[responseRows.length-1] < lastGreyRow(columnCounter + 3))
+            sheet.getRange(responseRows[responseRows.length-1]+1, columnCounter+3, lastGreyRow(columnCounter + 3)).setBackground('white');
+
+            sheet.setColumnWidths(columnCounter + 1, 2, 30);
+            sheet.setColumnWidth(columnCounter + 3, 5);
+          } else {
+            if (sheet.getRange(1, columnCounter + 1).getValue() == 'Voting')
+              sheet.deleteColumns(columnCounter + 1, 3);
           }
-          sheet.setColumnWidths(columnCounter + 1, 2, 30);
-          sheet.setColumnWidth(columnCounter + 3, 5);
-          columnCounter += 3;
-        }
-      } // Close voting or empty if
-      columnCounter++;
-    });
+        } // Close voting or empty if
+        columnCounter++;
+      });
+    }
   }
 
 
@@ -324,7 +388,7 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
 
 
   // Gives the data of the header row
-  function getHeaders() {
+  function getHeadRow() {
     return sheet.getSheetValues(1, 1, 1, sheet.getMaxColumns());
   }
 
@@ -332,12 +396,24 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
   // Gives the data of the header row that is neither empty nor 'Voting'
   function getTextHeaders() {
     var textHeaders = [[]];
-    var head = getHeaders();
+    var head = getHeadRow();
     head[0].forEach(function(header) {
       if (header != '' && header != 'Voting')
         textHeaders[0].push(header);
     });
     return textHeaders;
+  }
+
+
+  // Returns the last row that grey background in
+  function lastGreyRow(column) {
+    var lastRow = 1;
+    while (true) {
+      if (sheet.getRange(lastRow, column).getBackground() != '#808080')
+        break;
+      lastRow++;
+    }
+    return lastRow;
   }
 
 
@@ -353,14 +429,6 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
     for (she = resp; she < sheets.length; she++)
       ss.deleteSheet(sheets[she]);
   }
-
-
-  // Deletes unnecessary rows
-  function delRows() {
-    var resp = parseInt(ui.prompt('Last row to be kept').getResponseText());
-    sheet.deleteRows(resp, sheet.getMaxRows()-resp);
-  }
-
 } // End of Voting System Options
 
 
@@ -378,4 +446,5 @@ function vote() {
   } else if (highlight.getFormula() ==  '=IMAGE("http://i67.tinypic.com/23vi253.jpg", 4, 20, 20)') { // If downvote
     highlight.offset(0, -2).setFontSize(highlight.offset(0,-2).getFontSize() - 1);
   }
+  SpreadsheetApp.flush();
 }
