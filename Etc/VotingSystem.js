@@ -52,14 +52,12 @@ function onOpen() {
     .addItem('Make Voting Cells','makeVotingCells')
     .addSeparator()
     // Applies to info about the script
-    .addItem('Info', 'info')
-    .addSeparator()
-    // Just for me to make things easier
-    .addItem('Delete Sheets','delSheets')
+    .addItem('Voting System Info', 'info')
     .addToUi();
   }
-  ui.createMenu('Vote').addItem('Vote', 'vote').addToUi();  // Vote Menu
+  ui.createMenu('Vote').addItem('Vote', 'vote').addItem('How to Vote', 'voteInfo').addToUi();  // Vote Menu
   ui.createMenu('Authorization').addItem('Give Edit Permission', 'onOpen').addToUi();  // Authorization Menu
+  //ui.createMenu('Temporary Functions').addItem('Delete Sheets','delSheets').addToUi();  // Temporary Functions Menu
 }
 
 
@@ -244,7 +242,7 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
   // Makes the upvote and downvote columns
   function makeVotingCells() {
     var goOrNo = ui.alert('It is highly recommended that you delete unnecessary rows before you make the voting cells.',
-                          'If you have already deleted unnecessary rows, click "OK." If you haven\'t done so, click either "CANCEL" or the X button in the top right.\nNumber of rows in this sheet: '+sheet.getMaxRows().toString(),
+                          'If you have already deleted unnecessary rows, click "OK." If you haven\'t done so, click either "CANCEL" or the X button in the top right.\n\nNumber of rows in this sheet: '+sheet.getMaxRows().toString(),
         ui.ButtonSet.OK_CANCEL);
     if (goOrNo == ui.Button.OK) {
       var columnCounter = 1;
@@ -304,22 +302,52 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
   //--------------------------------------------------------------------------------------------------------------------------//
 
 
-  // Gives info to Soder about how it works
+  // Gives info about how the Voting System works
   function info() {
     ui.alert('Welcome to the Voting System!\n\n' +
-             'I modeled this after your "Thesis Upvote Activity," trying to make it easier and more efficient for all parties involved. '+
-             'I hope you like it and find use for it for your classes!\n\n\n\n'+
-             'Descriptions of the menu options\n\n'+
-             '"Create Sheet Headers" - This freezes the top/header row and asks you to set what you want to have as your headers.\n'+
-             '"Make Voting Cells" - *ONLY CLICK THIS WHEN EVERYONE HAS PUT THEIR RESPONSES UNDER THE HEADINGS* This creates the upvote and down vote columns that will allow everyone to vote (increase and decrease the font size).\n'+
-             '"Clear Sheet Headers" - Makes the top/header row blank.\n'+
-             '"Resize Header Columns" - Resizes only the header columns that you have placed text into, excludes "Voting" and empty cells for adjustment.\n'+
+             'This add-on allows users to enter responses under headers for evaluation by the other editors of the document. '+
+             'Larger font size indicates more upvotes, and smaller font size indicates more downvotes. '+
+             'To see how to vote, click \'How to Vote\' under the \'Vote\' menu on the ribbon.\n\n\n\n'+
+
+             'Descriptions of the "Voting System" menu options\n\n'+
+             '"Create Sheet Headers" - Freezes the top/header row and asks you to set what you want to have as your headers. It then asks you to set the alignment of the text and the size of the columns.\n'+
+             '"Make New Spreadsheet" - Prompts you to name a new spreadsheet, which will be an exact copy of the current spreadsheet. (Note: The new spreadsheet will require you and all editors to click "Give Edit Permission" under the "Authorization" menu again on the new spreadsheet).\n'+
+             '"Make New Sheet with Same Headers" - Prompts you to indicate how many new sheets you want to create, and creates that many new sheets, all with the same headers as the initial sheet.\n'+
+
+             '"Clear Header Row" - Makes the entire first row blank.\n'+
+             '"Change All Column Widths" - Prompts you to provide a size for all the columns in the sheet to be.\n'+
+
+             '"Change Header Widths" - Prompts you to provide a size for only the columns with headers to be, excludes "Voting" and empty cells for adjustment.\n'+
              '"Change Header Font Size" - Changes the font size of only the header columns that you have placed text into, excludes "Voting" and empty cells for adjustment.\n'+
-             '"Info" - Gives this info.\n\n'+
-             'P.S. If you have any problems with the voting (if someone adds their response after you made the voting columns and you click "Make Voting Cells" again, the sheets will be a bit messed up), you can always add a new sheet on the bottom with the plus button and restart on another sheet.\n\n\n\n'+
+
+             '"Delete Sheet Rows" - Deletes all the rows after the row that the user gives. *HIGHLY RECOMMENDED BEFORE MAKING VOTING CELLS*\n'+
+             '"Make Voting Cells" - This creates the upvote and downvote columns that will allow everyone to vote (increase and decrease the font size). This can be pressed at any time and will update the voting columns to fit the data in the sheet when it is pressed.\n'+
+
+             '"Voting System Info" - Gives this info.\n\n\n'+
+
+
+             'Descriptions of the "Vote" menu options\n\n'+
+             '"Vote" - Vote on the text to the left of the vote arrow.\n'+
+             '"How to Vote" - Describes how to vote and what voting does.\n\n\n'+
+
+
+             'Description of the "Authorization" menu option\n\n'+
+             '"Give Edit Permission" - Gives the script edit permission for the document (needed for the voting system to work).\n\n\n\n\n'+
+
+
+
              'If you have any questions or requests, ask me and I will try my best to deliver!\n'+
-             '- Danilo Montes'
+             '- Danilo Montes\n'+
+             'danilo.montes101@gmail.com'
             );
+  }
+
+
+  // Gives info about how to vote
+  function voteInfo() {
+    ui.alert('In order to vote, select the cell of with the vote arrow of the vote that you want to perform. '+
+             'Then, either click \'Vote\' option under the \'Vote\' menu on the ribbon or press ctrl+alt+shift+1.\n\n'+
+             'The upvotes and downvotes increase and decrease the font size of the text to the left respectively.')
   }
 
 
@@ -415,20 +443,6 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
     }
     return lastRow;
   }
-
-
-  //--------------------------------------------------------------------------------------------------------------------------//
-  //-----------------------------------------------------/Temporary/----------------------------------------------------------//
-  //--------------------------------------------------------------------------------------------------------------------------//
-
-
-  // Deletes sheets in the given number range
-  function delSheets() {
-    var resp = parseInt(ui.prompt('Number of first sheets to keep').getResponseText());
-    var sheets = ss.getSheets();
-    for (she = resp; she < sheets.length; she++)
-      ss.deleteSheet(sheets[she]);
-  }
 } // End of Voting System Options
 
 
@@ -448,3 +462,17 @@ function vote() {
   }
   SpreadsheetApp.flush();
 }
+
+
+//--------------------------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------/Temporary Menu/-------------------------------------------------------//
+//--------------------------------------------------------------------------------------------------------------------------//
+
+
+  // Deletes sheets in the given number range
+  function delSheets() {
+    var resp = parseInt(ui.prompt('Number of sheets to keep (have to be in the front of the list to be saved).').getResponseText());
+    var sheets = ss.getSheets();
+    for (she = resp; she < sheets.length; she++)
+      ss.deleteSheet(sheets[she]);
+  }
