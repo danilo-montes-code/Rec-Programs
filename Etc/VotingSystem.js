@@ -245,54 +245,53 @@ if (isAuthenticated()) { // Only gives access to the creation of the voting syst
                           'If you have already deleted unnecessary rows, click "OK." If you haven\'t done so, click either "CANCEL" or the X button in the top right.\n\nNumber of rows in this sheet: '+sheet.getMaxRows().toString(),
         ui.ButtonSet.OK_CANCEL);
     if (goOrNo == ui.Button.OK) {
-      var columnCounter = 1;
       var headers = getHeadRow();
-      headers[0].forEach(function(header) {
+      for (col = 1; col <= sheet.getMaxColumns(); col++) {
+        header = sheet.getRange(1, col).getValue();
 
         // If the header is neither empty nor has 'Voting' in the box
         if (header != '' && header != 'Voting') {
-          var responseRows = getResponseRowAmnt(columnCounter);
+          var responseRows = getResponseRowAmnt(col);
 
           // If there is something under the header
           if (responseRows.length != 0) {
-            if (sheet.getRange(1, columnCounter + 1).getValue() != 'Voting') { // Prevents a second voting layer if there is already one
+            if (sheet.getRange(1, col + 1).getValue() != 'Voting') { // Prevents a second voting layer if there is already one
 
               // Makes the three voting columns
               for (i = 0; i < 3; i++)
-                sheet.insertColumnAfter(columnCounter);
+                sheet.insertColumnAfter(col);
 
               // Sets the values in the voting columns
-              sheet.getRange(1, columnCounter+1, 1, 2).merge();
-              sheet.getRange(1, columnCounter+1).setValue('Voting').setHorizontalAlignment('center');
-              sheet.setColumnWidth(columnCounter+3, 5);
+              sheet.getRange(1, col+1, 1, 2).merge();
+              sheet.getRange(1, col+1).setValue('Voting').setHorizontalAlignment('center');
+              sheet.setColumnWidth(col+3, 5);
             }
 
             // Puts the voting columns next to the cells that are filled
             for (len = 0; len < responseRows.length; len++) {
               var rowPlacer = responseRows[len];
-              if (sheet.getRange(rowPlacer, columnCounter + 1).getFormula() != '=IMAGE("http://i67.tinypic.com/zwcexc.jpg", 4, 20, 20)') {
-                sheet.getRange(rowPlacer, columnCounter + 1).setValue('=IMAGE("http://i67.tinypic.com/zwcexc.jpg", 4, 20, 20)').setHorizontalAlignment("center").setVerticalAlignment("middle"); // Upvote
-                sheet.getRange(rowPlacer, columnCounter + 2).setValue('=IMAGE("http://i67.tinypic.com/23vi253.jpg", 4, 20, 20)').setHorizontalAlignment("center").setVerticalAlignment("middle"); // Downvote
+              if (sheet.getRange(rowPlacer, col + 1).getFormula() != '=IMAGE("http://i67.tinypic.com/zwcexc.jpg", 4, 20, 20)') {
+                sheet.getRange(rowPlacer, col + 1).setValue('=IMAGE("http://i67.tinypic.com/zwcexc.jpg", 4, 20, 20)').setHorizontalAlignment("center").setVerticalAlignment("middle"); // Upvote
+                sheet.getRange(rowPlacer, col + 2).setValue('=IMAGE("http://i67.tinypic.com/23vi253.jpg", 4, 20, 20)').setHorizontalAlignment("center").setVerticalAlignment("middle"); // Downvote
                 sheet.setRowHeight(rowPlacer, 30);
               }
             }
 
             // If the row that the last bit of data is in is greater than the last row that the grey background extends to, extends the grey to the end of the data
-            if (responseRows[responseRows.length-1] > lastGreyRow(columnCounter + 3))
-            sheet.getRange(1, columnCounter+3, responseRows[responseRows.length-1]).setBackground('grey');
+            if (responseRows[responseRows.length-1] > lastGreyRow(col + 3))
+            sheet.getRange(1, col+3, responseRows[responseRows.length-1]).setBackground('grey');
             // If the row that the last bit of data is in is less than the last row that the grey background extends to, shortens the grey to the end of the data
-            else if (responseRows[responseRows.length-1] < lastGreyRow(columnCounter + 3))
-            sheet.getRange(responseRows[responseRows.length-1]+1, columnCounter+3, lastGreyRow(columnCounter + 3)).setBackground('white');
+            else if (responseRows[responseRows.length-1] < lastGreyRow(col + 3))
+            sheet.getRange(responseRows[responseRows.length-1]+1, col+3, lastGreyRow(col + 3)).setBackground('white');
 
-            sheet.setColumnWidths(columnCounter + 1, 2, 30);
-            sheet.setColumnWidth(columnCounter + 3, 5);
+            sheet.setColumnWidths(col + 1, 2, 30);
+            sheet.setColumnWidth(col + 3, 5);
           } else {
-            if (sheet.getRange(1, columnCounter + 1).getValue() == 'Voting')
-              sheet.deleteColumns(columnCounter + 1, 3);
+            if (sheet.getRange(1, col + 1).getValue() == 'Voting')
+              sheet.deleteColumns(col + 1, 3);
           }
         } // Close voting or empty if
-        columnCounter++;
-      });
+      }
     }
   }
 
