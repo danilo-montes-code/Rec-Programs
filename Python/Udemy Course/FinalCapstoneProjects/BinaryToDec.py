@@ -1,8 +1,8 @@
-def int_checker(in):
-    while int(in) is NaN:
+def int_checker(inp):
+    while int(inp) is NaN:
         print('Error: Please enter a numerical answer\n')
-        in = input()
-    return in
+        inp = input()
+    return inp
 
 
 def convertToDec(number):
@@ -11,7 +11,7 @@ def convertToDec(number):
 def convertToBin(number):
     pass
 
-main():
+def main():
     print('Base Converter\n')
 
     change = input('What base would you like to convert from and to? (1 - Binary to Decimal or 2 - vise versa)\n')
