@@ -21,7 +21,7 @@ def main():
     bet = input(f'What do you wish to bet? You currently have {player.get_chips()} chips. ')
     try:
         int(bet)
-    except:
+    except TypeError:
         print('Please enter an integer number of chips to bet.')
         main()
     else:

@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="43abff3d-800a-4514-b4d8-b4a9d2630636" name="Default Changelist" comment="" />
+    <list default="true" id="43abff3d-800a-4514-b4d8-b4a9d2630636" name="Default Changelist" comment="">
+<<<<<<< HEAD
+      <change afterPath="$PROJECT_DIR$/../Java/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Java/.idea/Java.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Java/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Java/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Java/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Java/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Java/Factorial.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Java/Factorial.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Java/Factorial.java" afterDir="false" />
+=======
+>>>>>>> 7f1a65770f77a7cfcfd3717bf923ebf129c15d9a
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,23 +29,46 @@
           <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.35" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.open.time.45" value="1" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="32" />
+          <entry key="py" value="1406" />
+          <entry key="txt" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="32" />
+          <entry key="PLAIN_TEXT" value="25" />
+          <entry key="Python" value="1406" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="1" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Udemy Course/FinalCapstoneProjects/BinaryToDec.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -41,14 +77,15 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Udemy Course/FinalCapstoneProjects/PiToNth.py" />
+        <option value="$PROJECT_DIR$/Udemy Course/FinalCapstoneProjects/BinaryToDec.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="y" value="-10" />
-    <option name="width" value="1939" />
-    <option name="height" value="1099" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="91" />
+    <option name="y" value="-18" />
+    <option name="width" value="1940" />
+    <option name="height" value="1100" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -56,7 +93,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -69,14 +105,22 @@
               <item name="Python" type="462c0819:PsiDirectoryNode" />
               <item name="Udemy Course" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Python" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Python" type="462c0819:PsiDirectoryNode" />
+              <item name="Udemy Course" type="462c0819:PsiDirectoryNode" />
+              <item name="FinalCapstoneProjects" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Python Scripts" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -90,7 +134,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.BinaryToDec">
+    <configuration name="BinaryToDec" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Udemy Course/FinalCapstoneProjects" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Udemy Course/FinalCapstoneProjects/BinaryToDec.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="PiToNth" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -112,8 +177,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.PiToNth" />
+      <item itemvalue="Python.BinaryToDec" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.BinaryToDec" />
         <item itemvalue="Python.PiToNth" />
       </list>
     </recent_temporary>
@@ -136,18 +206,33 @@
       <option name="project" value="LOCAL" />
       <updated>1561344299994</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixed a check">
+      <created>1565501026427</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1565501026427</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Finished b2d">
+      <created>1565583801123</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1565583801123</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="878" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.31328487" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.31328487" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32952183" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32885906" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -166,13 +251,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test" />
-    <option name="LAST_COMMIT_MESSAGE" value="test" />
+    <MESSAGE value="Fixed a check" />
+    <MESSAGE value="Finished b2d" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished b2d" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Udemy Course/FinalCapstoneProjects/PiToNth.py">
+    <entry file="file://$PROJECT_DIR$/Udemy Course/FinalCapstoneProjects/PiToNth.py" />
+    <entry file="file://$PROJECT_DIR$/Udemy Course/FinalCapstoneProjects/BinaryToDec.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        <state relative-caret-position="391">
+          <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
         </state>
       </provider>
     </entry>
