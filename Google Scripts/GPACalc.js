@@ -34,6 +34,7 @@ function setLab() {
 
 // Calculates the GPA and writes it on the sheet
 function calc() {
+  lab = sheet.getRange("K14").getValue();
   if (lab != '0' && lab != '1' && lab != '2')
     ui.alert('Error: Please set your number of lab days.');
   else {
