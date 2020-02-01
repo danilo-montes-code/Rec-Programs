@@ -34,9 +34,15 @@ function setLab() {
 
 // Calculates the GPA and writes it on the sheet
 function calc() {
-  var gpaCell = sheet.getRange("H7");  // Where the GPA is going to be shown
-  var gpa = calcGrades(calcWeights(getGrades()));
-  gpaCell.setValue(gpa);  // Writes the GPA on the sheet
+  sheet.getRangeList(["B5:G13"]).trimWhitespace();
+  lab = sheet.getRange("K14").getValue();
+  if (lab != '0' && lab != '1' && lab != '2')
+    ui.alert('Error: Please set your number of lab days.');
+  else {
+    var gpaCell = sheet.getRange("H7");  // Where the GPA is going to be shown
+    var gpa = calcGrades(calcWeights(getGrades()));  // Calculates the GPA
+    gpaCell.setValue(gpa);  // Writes the GPA on the sheet
+  }
 }
 
 // Gets the grades and weights (in string representation), putting them into a list 
@@ -51,9 +57,10 @@ function calcWeights(grades){
   
   grades.forEach(function(subset){  // For each course level
     subset.forEach(function(row){  // For each row
-      if (row[0] == '' || row[1] == '') {  // Takes out row from data if unfilled or invalid
-        if (isNaN(row[0]))
-          ui.alert(row[0] + ' is not a valid grade.');
+      if (row[0] == '' || row[1] == '') {  // If cells are unfilled
+        // Ignores empty cells
+      } else if (isNaN(row[0]) && !isValidLetter(row[0])) {   // If there is not a number in the left cell and said value is not a valid letter grade
+        ui.alert(row[0] + ' is not a valid grade.');
       } else {
         var weight = row[1];  // String representation of the weight
         row[1] = numberWeight(weight);  // Converts to number representation of weight
@@ -66,6 +73,12 @@ function calcWeights(grades){
   return shortenedGrades;
 }
 
+// Checks to see if the letter grade entered into the first row is a valid letter grade
+function isValidLetter(grade) { 
+  grade = grade.toUpperCase();
+  return grade.equals("A+") || grade.equals("A") || grade.equals("A-") || grade.equals("B+") || grade.equals("B") || grade.equals("B-") || grade.equals("C+") || grade.equals("C") || grade.equals("C-") ||  grade.equals("D+") || grade.equals("D") || grade.equals("D-") || grade.equals("F");
+}
+
 // Converts the string representation of grade weights to numbers
 function numberWeight(stringWeight) {
   if (stringWeight.toUpperCase() == "FY")  // 5 Credits for Full Year
@@ -74,19 +87,11 @@ function numberWeight(stringWeight) {
     return 2.5;
   else if (stringWeight.toUpperCase() == "Q")  // 1.25 Credits for Quarter
     return 1.25;
-  else if (stringWeight.toUpperCase() == "SCI" ) {  // 5, 6, or 7 Credits, depending on number of lab days
-    var lab = sheet.getRange("K14").getValue();
-    if (lab != '0' && lab != '1' && lab != '2')
-      ui.alert('Error: Please set your number of lab days.');
-    else
-      return 5. + parseInt(sheet.getRange("K14").getValue());
-  } else if (stringWeight.toUpperCase() == "GYM") {  // 3, 4, or 5 Credits, depending on number of lab days
-    var lab = sheet.getRange("K14").getValue();
-    if (lab != '0' && lab != '1' && lab != '2')
-      ui.alert('Error: Please set your number of lab days.');
-    else
-      return 5. - parseInt(sheet.getRange("K14").getValue());
-  } else {
+  else if (stringWeight.toUpperCase() == "SCI" )  // 5, 6, or 7 Credits, depending on number of lab days
+    return 5. + parseInt(sheet.getRange("K14").getValue());
+  else if (stringWeight.toUpperCase() == "GYM")  // 3, 4, or 5 Credits, depending on number of lab days
+    return 5. - parseInt(sheet.getRange("K14").getValue());
+  else {
     ui.alert('Error: '+stringWeight+' is not a valid option.');
     return 0.;
   }
@@ -95,6 +100,7 @@ function numberWeight(stringWeight) {
 // Calculates your GPA
 function calcGrades(grades) {
   var ranks = [97.5, 91.5, 89.5, 85.5, 81.5, 79.5, 75.5, 71.5, 69.5, 65.5, 61.5, 59.5, 0];  // Lowest values of grades that achieve certain letters
+  var letters = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"];  // Letter grades in order
   var ap = [5.375, 5, 4.625, 4.125, 3.75, 3.375, 2.875, 2.5, 2.125, 1.625, 1.25, .875, .0];  // AP weights
   var honors = [4.945, 4.6, 4.255, 3.795, 3.45, 3.105, 2.645, 2.3, 1.955, 1.338, 1.15, .805, .0];  // Honors weights
   var academic = [4.3, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 1.0, .7, .0];  // Academic weights
@@ -105,11 +111,14 @@ function calcGrades(grades) {
   
   grades.forEach(function(gradeSet) {  // Each course level
     var weights = allWeights[count];
-    gradeSet.forEach(function(gradeSet) {  // Each row, 0 has grade, 1 has weight     
+    gradeSet.forEach(function(gradeSet) {  // Each row, 0 has grade, 1 has weight  
       numOfCredits += gradeSet[1];
       var i = 0;
-      while (ranks[i] > gradeSet[0])  // Descends dowm the ranks until the correct letter is achieved
-        i++;
+      if (isNaN(gradeSet[0]))   // If there is a letter grade in the grade column
+        i = letters.indexOf(gradeSet[0].toUpperCase());
+      else  // If there is a number grade in the grade column
+        while (ranks[i] > gradeSet[0])  // Descends dowm the ranks until the correct letter is achieved
+          i++;
       total += weights[i]*gradeSet[1];
     });
     count++;
