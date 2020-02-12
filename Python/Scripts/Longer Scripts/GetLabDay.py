@@ -49,9 +49,9 @@ driver.get('https://parents.ebnet.org/genesis/parents?gohome=true')
 
 # type text
 username = driver.find_element_by_xpath('//*[@id="j_username"]')
-username.send_keys('chabicasm@gmail.com')
+username.send_keys('username')
 password = driver.find_element_by_xpath('//*[@id="j_password"]')
-password.send_keys('kidsinfo')
+password.send_keys('password')
 
 # click login button
 login = driver.find_elements_by_xpath("/html/body/form/div/div[2]/input[1]")[0]
