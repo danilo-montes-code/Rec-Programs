@@ -23,19 +23,19 @@ from bs4 import BeautifulSoup
 def main() -> None:
     """driver function"""
 
-
     try: 
         data = open('villager-data.txt', 'r')
 
-        data.close()
+        print(data.read())
 
     except:
         # file does not exist, connect to wiki
         dom = connect()
-
         prof_list = get_list(dom)
+        write_to_file(prof_list)
 
-        display(prof_list)
+    finally:
+        data.close()
     
 
 #################################################
@@ -96,7 +96,7 @@ JSON format of villager records
 }
 '''
 
-def display(data):
+def write_to_file(data):
     for item in data:
         print('[=========' + item['profession'] + '=========]')
 
@@ -106,6 +106,16 @@ def display(data):
             for exchange in item['trades']['exchanges']:
                 pass
 
+
+def display_data(villagers):
+    for item in villagers:
+        print('[=========' + item['profession'] + '=========]')
+
+        for trade in item['trades']:
+            print('----' + trade['level'] + '----')
+
+            for exchange in item['trades']['exchanges']:
+                print(exchange)
 
 
 
