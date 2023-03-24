@@ -11,7 +11,8 @@ Dependencies:
 * BeautifulSoup
 """
 
-import requests
+import requests, json, os.path
+from typing import TextIO
 from bs4 import BeautifulSoup
 
 #################################################
@@ -23,20 +24,74 @@ from bs4 import BeautifulSoup
 def main() -> None:
     """driver function"""
 
+    # if file does not exist
+    if not os.path.isfile('villager-data.txt'):
+        create_file()
+
+        with open('villager-data.txt', 'w') as f:
+            dom = connect()
+            prof_list = get_list(dom)
+            data = make_into_json(prof_list)
+            write_to_file(f, data)
+
+    # open file
+    file = open_file()
+
+    if file is None:
+        return
+    
+    # display data from file
+    # TODO add different display options
+    # TODO add command line args
+
+    
+
+
+#################################################
+#                 File Handling                 #
+#################################################
+
+def create_file() -> bool:
+    """Create file for local storage of villager data
+
+    Returns
+    -------
+    true,  if file was created successfully
+    false, otherwise
+    """
+    try:
+        with open('villager-data.txt', 'w') as f:
+            ret = True
+        print('file created successfully')
+
+    except IOError:
+        print('error creating file')
+
+
+def open_file() -> TextIO:
+
     try: 
         data = open('villager-data.txt', 'r')
+        print('file opened successfully')
 
-        print(data.read())
-
-    except:
-        # file does not exist, connect to wiki
-        dom = connect()
-        prof_list = get_list(dom)
-        write_to_file(prof_list)
+    except IOError:
+        print('error: could not read from file')
+        data = None
 
     finally:
-        data.close()
+        return data
     
+
+def write_to_file(file, data) -> None:
+    
+    try:
+        file.write(data)
+        print('success writing to file')
+
+    except:
+        print('error writing to file')
+
+
 
 #################################################
 #              Connecting and DOM               #
@@ -70,11 +125,15 @@ def get_list(dom) -> list:
     Returns
     -------
     list
-        a list of DOM objects for saving
+        a list of DOM objects
     """
 
     return []
 
+
+#################################################
+#                 Data Handling                 #
+#################################################
 
 '''
 JSON format of villager records
@@ -95,8 +154,7 @@ JSON format of villager records
     ]  
 }
 '''
-
-def write_to_file(data):
+def make_into_json(data):
     for item in data:
         print('[=========' + item['profession'] + '=========]')
 
@@ -106,6 +164,12 @@ def write_to_file(data):
             for exchange in item['trades']['exchanges']:
                 pass
 
+
+
+
+#################################################
+#                    Display                    #
+#################################################
 
 def display_data(villagers):
     for item in villagers:
@@ -122,5 +186,5 @@ def display_data(villagers):
 
 
 
-if __name__ == __name__:
+if __name__ == '__main__':
     main()
