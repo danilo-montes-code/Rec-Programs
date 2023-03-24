@@ -26,7 +26,8 @@ def main() -> None:
 
     # if file does not exist
     if not os.path.isfile('villager-data.txt'):
-        create_file()
+        if not create_file():
+            return
 
         with open('villager-data.txt', 'w') as f:
             dom = connect()
@@ -66,6 +67,10 @@ def create_file() -> bool:
 
     except IOError:
         print('error creating file')
+        ret = False
+
+    finally:
+        return ret
 
 
 def open_file() -> TextIO:
