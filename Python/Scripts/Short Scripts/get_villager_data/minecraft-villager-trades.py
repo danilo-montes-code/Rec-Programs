@@ -134,7 +134,7 @@ def connect() -> BeautifulSoup:
     return soup
 
 
-def get_list(dom: BeautifulSoup) -> tuple:
+def get_list(dom: BeautifulSoup) -> tuple[list[str], list[Tag]]:
     """Parses the DOM to get the required tables and job sites
 
     Parameters
@@ -211,7 +211,7 @@ JSON format of villager records
     ]
 }
 '''
-def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list:
+def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list[dict]:
     """Traverses the tables to assemble the JSON for storage
 
     Parameters
@@ -247,12 +247,12 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list:
         #         has attr 'rowspan' that holds the number of trades
 
         row_tracker = 2  # track the rows in the table
-        trade_info = []  # holds the trade info
+        trades = []  # holds the trade info
 
         # handle each level of trade
         for i in range(5):
 
-            trades = []
+            trade_level = {}
 
             top_row = table_rows[row_tracker].contents[1]
             if top_row.has_attr('rowspan'):
@@ -260,19 +260,22 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list:
             else:
                 num_of_trades = 1
 
-            trade_level = top_row.get_text().lower().strip()
+            trade_level_string = top_row.get_text().lower().strip()
+            trade_level['level'] = trade_level_string
 
-            print(trade_level + ' has ' + str(num_of_trades) + ' trades')
+            print(trade_level_string + ' has ' + str(num_of_trades) + ' trades')
 
 
             rows = table_rows[row_tracker : row_tracker+num_of_trades]
             row_tracker += num_of_trades
 
-
+            exchanges = []
 
             # handle each trade within a level
             first_row = True
             for row in rows:
+
+                exchange_info = {}
 
                 # first row has additional table header changing format
                 columns = [content for content in row.contents if content.get_text() != '\n']
@@ -289,7 +292,29 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list:
                 trades_until_disabled = columns[5].get_text().strip()
                 xp_to_villager        = columns[6].get_text().strip()
 
+                exchange_info['wanted'] = {
+                    'item'             : item_wanted,
+                    'default-quantity' : default_quantity,
+                    'price-multiplier' : price_multiplier
+                }
+                exchange_info['given'] = {
+                    'item'     : item_given,
+                    'quantity' : quantity
+                }
+                exchange_info['trades-until-disabled'] = trades_until_disabled
+                exchange_info['xp-to-villager'] = xp_to_villager
 
+                exchanges.append(exchange_info)
+
+
+            trade_level['exchanges'] = exchanges
+
+
+            trades.append(trade_level)
+
+        info['trades'] = trades
+
+        villager_data.append(info)
 
 
 
@@ -302,7 +327,7 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list:
 #                    Display                    #
 #################################################
 
-def display_data(villagers):
+def display_data(villagers: list[dict]) -> None:
     # for item in villagers:
     #     print('[=========' + item['profession'] + '=========]')
 
