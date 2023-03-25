@@ -232,8 +232,6 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list[dict]:
         info['profession'] = profession
         info['job-site-block'] = job_sites[i]
 
-        # print('[=====' + profession.upper() + '=====]')
-
 
         # tr[2] = Novice row, includes first trade
         #         has attr 'rowspan' that holds the number of trades
@@ -254,9 +252,6 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list[dict]:
 
             trade_level_string = top_row.get_text().lower().strip()
             trade_level['level'] = trade_level_string
-
-            # print(trade_level_string + ' has ' + str(num_of_trades) + ' trades')
-
 
             rows = table_rows[row_tracker : row_tracker+num_of_trades]
             row_tracker += num_of_trades
