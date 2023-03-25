@@ -169,15 +169,11 @@ def get_list(dom: BeautifulSoup) -> list:
 
     job_sites = job_sites[:13]
 
-
-
-
     # for i, prof in enumerate(professions):
     #     print(str(i) + ': ' + prof)
 
     # for i in range(13):
     #     print(professions[i] + ' -> ' + job_sites[i])
-
 
 
     # get tables related to villager trades
@@ -195,6 +191,13 @@ def get_list(dom: BeautifulSoup) -> list:
 
 
 
+
+
+    # for table in tables:
+    #     table_body = table['tbody']
+    #     print(len(table_body))
+
+    print(tables[1].contents[0])
 
 
 
@@ -243,7 +246,7 @@ JSON format of villager records
             ]
         },
         ...
-    ]\
+    ]
 }
 '''
 def make_into_json(data):
