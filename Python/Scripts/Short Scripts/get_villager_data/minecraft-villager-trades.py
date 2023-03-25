@@ -14,6 +14,7 @@ Dependencies:
 import requests, json, os.path, sys
 from typing import TextIO
 from bs4 import BeautifulSoup
+from bs4 import Tag
 
 
 
@@ -38,7 +39,7 @@ def main() -> None:
             with open('villager-data.txt', 'w') as f:
                 dom = connect()
                 prof_list = get_list(dom)
-                data = make_into_json(prof_list)
+                data = make_into_dicts(prof_list)
                 write_to_file(f, data)
 
 
@@ -56,8 +57,8 @@ def main() -> None:
     else:
 
         dom = connect()
-        prof_list = get_list(dom)
-        data = make_into_json(prof_list)
+        job_sites, trade_tables = get_list(dom)
+        data = make_into_dicts(job_sites, trade_tables)
         display_data(data)
     
 
@@ -71,7 +72,7 @@ def create_file() -> bool:
 
     Returns
     -------
-    true,  if file was created successfully
+    true,  if file was created successfully /
     false, otherwise
     """
     try:
@@ -133,8 +134,8 @@ def connect() -> BeautifulSoup:
     return soup
 
 
-def get_list(dom: BeautifulSoup) -> list:
-    """Parses the DOM to get the required items to put in a list
+def get_list(dom: BeautifulSoup) -> tuple:
+    """Parses the DOM to get the required tables and job sites
 
     Parameters
     ----------
@@ -143,23 +144,13 @@ def get_list(dom: BeautifulSoup) -> list:
 
     Returns
     -------
-    list
-        a list of DOM objects
+    tuple
+        a tuple that contains both job sites and trade tables
     """
 
-    ##### This wiki is *very* annoyingly formatted so parsing isn't as
+    ##### The wiki is *very* annoyingly formatted so parsing isn't as
     ##### simple as it should be
 
-
-    # get headers related to villager professions
-    headers = dom.select('h3')
-    headers = headers[3:16]
-
-    professions = []
-    for header in headers:
-        professions.append(header.get_text().lower())
-
-    
     # get job sites for each profession
     job_sites_span = dom.select('h3 ~ p > a[href^="/wiki/"] > span > span.sprite-text')
 
@@ -169,11 +160,6 @@ def get_list(dom: BeautifulSoup) -> list:
 
     job_sites = job_sites[:13]
 
-    # for i, prof in enumerate(professions):
-    #     print(str(i) + ': ' + prof)
-
-    # for i in range(13):
-    #     print(professions[i] + ' -> ' + job_sites[i])
 
 
     # get tables related to villager trades
@@ -188,32 +174,8 @@ def get_list(dom: BeautifulSoup) -> list:
         tables[i] = tables[i-1]
     tables[9] = mason_table
 
+    return (job_sites, tables)
 
-
-
-
-
-    # for table in tables:
-    #     table_body = table['tbody']
-    #     print(len(table_body))
-
-    print(tables[1].contents[0])
-
-
-
-
-    with open(os.path.join(sys.path[0], 'tables.txt'), 'w') as f:
-        
-        stuff = []
-        for table in tables:
-            desc = table['data-description']
-            parts = desc.split(' ')
-
-            stuff.append(desc)
-
-        f.write('\n'.join(stuff))
-
-    return []
 
 
 #################################################
@@ -249,16 +211,89 @@ JSON format of villager records
     ]
 }
 '''
-def make_into_json(data):
-    # for item in data:
-    #     print('[=========' + item['profession'] + '=========]')
+def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list:
+    """Traverses the tables to assemble the JSON for storage
 
-    #     for trade in item['trades']:
-    #         print('----' + trade['level'] + '----')
+    Parameters
+    ----------
+    job_sites : list[str]
+        list of job site blocks for each villager
+    data : list[Tag]
+        list of tables containing villager trade info
 
-    #         for exchange in item['trades']['exchanges']:
-    #             pass
-    return ['hi']
+    Returns
+    -------
+    list
+        a list of dicts holding the data of villager trades
+    """
+
+    villager_data = []  # stores all the villager trade data
+
+    # traverse the tables
+    for i, table in enumerate(data):
+
+        info = {}
+        table_rows = table.select('tr')
+
+        # tr[0] = <PROFESSION> Economic Trade
+        profession = table_rows[0].contents[1].get_text().split(' ')[0].lower().strip()
+        info['profession'] = profession
+        info['job-site-block'] = job_sites[i]
+
+        print('[=====' + profession.upper() + '=====]')
+
+
+        # tr[2] = Novice row, includes first trade
+        #         has attr 'rowspan' that holds the number of trades
+
+        row_tracker = 2  # track the rows in the table
+        trade_info = []  # holds the trade info
+
+        # handle each level of trade
+        for i in range(5):
+
+            trades = []
+
+            top_row = table_rows[row_tracker].contents[1]
+            if top_row.has_attr('rowspan'):
+                num_of_trades = int(top_row['rowspan'])
+            else:
+                num_of_trades = 1
+
+            trade_level = top_row.get_text().lower().strip()
+
+            print(trade_level + ' has ' + str(num_of_trades) + ' trades')
+
+
+            rows = table_rows[row_tracker : row_tracker+num_of_trades]
+            row_tracker += num_of_trades
+
+
+
+            # handle each trade within a level
+            first_row = True
+            for row in rows:
+
+                # first row has additional table header changing format
+                columns = [content for content in row.contents if content.get_text() != '\n']
+                if first_row:
+                    columns = columns[1:]
+                    first_row = False
+
+                # actually get the trade info
+                item_wanted           = columns[0].get_text().strip()
+                default_quantity      = columns[1].get_text().strip()
+                price_multiplier      = columns[2].get_text().strip()
+                item_given            = columns[3].get_text().strip()
+                quantity              = columns[4].get_text().strip()
+                trades_until_disabled = columns[5].get_text().strip()
+                xp_to_villager        = columns[6].get_text().strip()
+
+
+
+
+
+    return villager_data
 
 
 
