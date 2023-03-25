@@ -11,7 +11,7 @@ Dependencies:
 * BeautifulSoup
 """
 
-import requests, json, os.path, sys
+import requests, json, os.path, sys, re
 from typing import TextIO
 from bs4 import BeautifulSoup
 from bs4 import Tag
@@ -19,6 +19,7 @@ from bs4 import Tag
 
 
 TESTING = True
+file_path = os.path.join(sys.path[0], 'villager-data.txt')
 
 
 
@@ -32,14 +33,15 @@ def main() -> None:
 
     if not TESTING: 
         # if file does not exist
-        if not os.path.isfile('villager-data.txt'):
+
+        if not os.path.isfile(file_path):
             if not create_file():
                 return
 
-            with open('villager-data.txt', 'w') as f:
+            with open(file_path, 'w') as f:
                 dom = connect()
-                prof_list = get_list(dom)
-                data = make_into_dicts(prof_list)
+                job_sites, trade_tables = get_list(dom)
+                data = make_into_dicts(job_sites, trade_tables)
                 write_to_file(f, data)
 
 
@@ -76,7 +78,7 @@ def create_file() -> bool:
     false, otherwise
     """
     try:
-        with open('villager-data.txt', 'w') as f:
+        with open(file_path, 'w'):
             ret = True
         print('file created successfully')
 
@@ -90,8 +92,9 @@ def create_file() -> bool:
 
 def open_file() -> TextIO:
 
-    try: 
-        data = open('villager-data.txt', 'r')
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
         print('file opened successfully')
 
     except IOError:
@@ -102,10 +105,10 @@ def open_file() -> TextIO:
         return data
     
 
-def write_to_file(file, data) -> None:
+def write_to_file(file: TextIO, data: list[dict]) -> None:
     
     try:
-        file.write(data)
+        json.dump(data, file, indent=2)
         print('success writing to file')
 
     except:
@@ -240,7 +243,7 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list[dict]:
         info['profession'] = profession
         info['job-site-block'] = job_sites[i]
 
-        print('[=====' + profession.upper() + '=====]')
+        # print('[=====' + profession.upper() + '=====]')
 
 
         # tr[2] = Novice row, includes first trade
@@ -263,7 +266,7 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list[dict]:
             trade_level_string = top_row.get_text().lower().strip()
             trade_level['level'] = trade_level_string
 
-            print(trade_level_string + ' has ' + str(num_of_trades) + ' trades')
+            # print(trade_level_string + ' has ' + str(num_of_trades) + ' trades')
 
 
             rows = table_rows[row_tracker : row_tracker+num_of_trades]
@@ -284,13 +287,14 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list[dict]:
                     first_row = False
 
                 # actually get the trade info
-                item_wanted           = columns[0].get_text().strip()
-                default_quantity      = columns[1].get_text().strip()
-                price_multiplier      = columns[2].get_text().strip()
-                item_given            = columns[3].get_text().strip()
-                quantity              = columns[4].get_text().strip()
-                trades_until_disabled = columns[5].get_text().strip()
-                xp_to_villager        = columns[6].get_text().strip()
+                remove_notes = '\[note \d\]'
+                item_wanted           = re.sub(remove_notes, '', columns[0].get_text().strip())
+                default_quantity      = re.sub(remove_notes, '', columns[1].get_text().strip())
+                price_multiplier      = re.sub(remove_notes, '', columns[2].get_text().strip())
+                item_given            = re.sub(remove_notes, '', columns[3].get_text().strip())
+                quantity              = re.sub(remove_notes, '', columns[4].get_text().strip())
+                trades_until_disabled = re.sub(remove_notes, '', columns[5].get_text().strip())
+                xp_to_villager        = re.sub(remove_notes, '', columns[6].get_text().strip())
 
                 exchange_info['wanted'] = {
                     'item'             : item_wanted,
@@ -337,7 +341,6 @@ def display_data(villagers: list[dict]) -> None:
     #         for exchange in item['trades']['exchanges']:
     #             print(exchange)
     print(villagers[0])
-
 
 
 
