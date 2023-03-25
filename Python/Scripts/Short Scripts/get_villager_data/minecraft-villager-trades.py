@@ -16,12 +16,7 @@ from typing import TextIO
 from bs4 import BeautifulSoup
 from bs4 import Tag
 
-
-
-TESTING = True
 file_path = os.path.join(sys.path[0], 'villager-data.txt')
-
-
 
 
 #################################################
@@ -31,37 +26,31 @@ file_path = os.path.join(sys.path[0], 'villager-data.txt')
 def main() -> None:
     """driver function"""
 
-    if not TESTING: 
-        # if file does not exist
+    # if file does not exist
 
-        if not os.path.isfile(file_path):
-            if not create_file():
-                return
-
-            with open(file_path, 'w') as f:
-                dom = connect()
-                job_sites, trade_tables = get_list(dom)
-                data = make_into_dicts(job_sites, trade_tables)
-                write_to_file(f, data)
-
-
-        # open file
-        file = open_file()
-
-        if file is None:
+    if not os.path.isfile(file_path):
+        if not create_file():
             return
-        
-        # display data from file
-        # TODO add different display options
-        # TODO add command line args
-        display_data(data)
 
-    else:
+        with open(file_path, 'w') as f:
+            dom = connect()
+            job_sites, trade_tables = get_list(dom)
+            data = make_into_dicts(job_sites, trade_tables)
+            write_to_file(f, data)
 
-        dom = connect()
-        job_sites, trade_tables = get_list(dom)
-        data = make_into_dicts(job_sites, trade_tables)
-        display_data(data)
+
+    # open file
+    file = open_file()
+
+    if file is None:
+        return
+    
+    # display data from file
+    # TODO add different display options
+    # TODO add command line args
+    display_data(file)
+
+   
     
 
 
@@ -108,7 +97,7 @@ def open_file() -> TextIO:
 def write_to_file(file: TextIO, data: list[dict]) -> None:
     
     try:
-        json.dump(data, file, indent=2)
+        json.dump(data, file, ensure_ascii=False, indent=2)
         print('success writing to file')
 
     except:
