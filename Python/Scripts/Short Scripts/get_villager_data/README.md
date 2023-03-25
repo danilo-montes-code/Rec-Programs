@@ -10,3 +10,5 @@ Scrapes https://minecraft.fandom.com/wiki/Trading to get the villager trade info
 ## Planned Features
 * command line arguments for getting only given professions
 * different display options (simple, complex, full)
+* ask to write output to a file (https://stackoverflow.com/questions/47699023/how-to-write-console-output-on-text-file)
+* searching for trades via items wanted/given

@@ -19,14 +19,13 @@ from bs4 import Tag
 file_path = os.path.join(sys.path[0], 'villager-data.json')
 
 
+
 #################################################
 #                     Main                      #
 #################################################
 
 def main() -> None:
     """driver function"""
-
-    # if file does not exist
 
     if not os.path.isfile(file_path):
         if not create_file():
@@ -48,11 +47,10 @@ def main() -> None:
     # display data from file
     # TODO add different display options
     # TODO add command line args
+    # TODO ask to output data to file
     display_data(file)
 
-   
-    
-
+     
 
 #################################################
 #                 File Handling                 #
@@ -63,8 +61,9 @@ def create_file() -> bool:
 
     Returns
     -------
-    true,  if file was created successfully /
-    false, otherwise
+    bool
+        true,  if file was created successfully /
+        false, otherwise
     """
     try:
         with open(file_path, 'w'):
@@ -80,6 +79,14 @@ def create_file() -> bool:
 
 
 def open_file() -> TextIO:
+    """Opens file for reading
+
+    Returns
+    -------
+    TextIO
+        file that was opened,
+        None, if there was an error opening the file
+    """
 
     try:
         with open(file_path, 'r') as f:
@@ -95,6 +102,15 @@ def open_file() -> TextIO:
     
 
 def write_to_file(file: TextIO, data: list[dict]) -> None:
+    """Writes JSON to file
+    
+    Parameters
+    ----------
+    file : TextIO
+        file to write data to
+    data : list[dict]
+        list of dictionaries to write to file
+    """
     
     try:
         json.dump(data, file, ensure_ascii=False, indent=2)
@@ -185,8 +201,8 @@ JSON format of villager records
             "exchanges" : [
                 {
                     "wanted" : {
-                        'item' : <ITEM>,
-                        'default-quantity' : <NUMBER>,
+                        'item' : [<ITEM>],
+                        'default-quantity' : [<NUMBER>],
                         'price-multiplier' : <NUMBER>
                     },
                     "given"  : {
@@ -272,13 +288,18 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list[dict]:
 
                 # actually get the trade info
                 remove_notes = '\[note \d\]'
-                item_wanted           = re.sub(remove_notes, '', columns[0].get_text().strip())
-                default_quantity      = re.sub(remove_notes, '', columns[1].get_text().strip())
+                item_wanted           = [re.sub(remove_notes, '', columns[0].get_text().strip())]
+                default_quantity      = [re.sub(remove_notes, '', columns[1].get_text().strip())]
                 price_multiplier      = re.sub(remove_notes, '', columns[2].get_text().strip())
                 item_given            = re.sub(remove_notes, '', columns[3].get_text().strip())
                 quantity              = re.sub(remove_notes, '', columns[4].get_text().strip())
                 trades_until_disabled = re.sub(remove_notes, '', columns[5].get_text().strip())
                 xp_to_villager        = re.sub(remove_notes, '', columns[6].get_text().strip())
+
+                # if there are multiple items wanted for a trade
+                if '\n' in item_wanted[0]:
+                    item_wanted = item_wanted[0].split('\n')
+                    default_quantity = default_quantity[0].split(' ')
 
                 exchange_info['wanted'] = {
                     'item'             : item_wanted,
@@ -316,17 +337,47 @@ def make_into_dicts(job_sites: list[str], data: list[Tag]) -> list[dict]:
 #################################################
 
 def display_data(villagers: list[dict]) -> None:
-    # for item in villagers:
-    #     print('[=========' + item['profession'] + '=========]')
+    """Displays the given villager data
 
-    #     for trade in item['trades']:
-    #         print('----' + trade['level'] + '----')
+    Parameters
+    ----------
+    villagers : list[dict]
+        list of infomation regarding villager trades to be printed
+    """
 
-    #         for exchange in item['trades']['exchanges']:
-    #             print(exchange)
-    print(villagers[0])
+    # ─ │ ┌ ┐ └ ┘
+
+    for profession in villagers:
+        print_centered( '┌──────────────────────────────────────┐')
+        print_centered(f'│{profession["profession"].title().center(38)}│')
+        print_centered( '└──────────────────────────────────────┘')
+
+        trades = profession['trades']
+
+        for trade in trades:
+            print_centered( '┌───────────────────────┐')
+            print_centered(f'│{trade["level"].title().center(23)}│')
+            print_centered( '└───────────────────────┘')
+
+            for exchange in trade['exchanges']:
+                wanted = exchange['wanted']
+                given = exchange['given']
+                wanted_string = ', '.join(wanted['item'])
+                print_centered(wanted_string + ' -> ' + given['item'])
+
+        print('=' * 50)
 
 
+def print_centered(text: str) -> None:
+    """Prints the given text with a center value of 50
+
+    Parameters
+    ----------
+    text : str
+        the text to be printed
+    """
+
+    print(text.center(50))
 
 
 
