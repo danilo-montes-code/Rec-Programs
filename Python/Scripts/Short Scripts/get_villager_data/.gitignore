@@ -1,2 +1,2 @@
-# ignore txt file created by script
-*.txt
+# ignore file created by script
+*.json
